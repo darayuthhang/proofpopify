@@ -1,0 +1,53 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  name              String?
+  email             String    @unique
+  password          String?
+  role              Role      @default(USER)
+  emailVerified     Boolean   @default(false)
+  verificationToken String?   @unique
+  tokenExpiresAt    DateTime?
+  authProvider      String    @default("credentials")
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  passwordResetToken String?   @unique
+  resetTokenExpires  DateTime?
+  isAccess             Boolean   @default(false)  
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+  startups               Startup[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Startup {
+  id                  String   @id @default(cuid())
+  name                String
+  userId              String
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeRestrictedKey String?  @map("stripe_restricted_key")
+  themeColor          String   @default("#00B4D8")
+  backgroundColor     String   @default("#ffffff")
+  proof_id            String @unique @default(cuid()) 
+  actionText          String   @default("subscribed")
+  showRealNames       Boolean  @default(true)
+  position            String   @default("bottom-left")
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
