@@ -140,15 +140,15 @@ export const authOptions = {
       }
       return session;
     },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith("/")) return new URL(url, baseUrl).toString();
-      // Allows callback URLs on the same origin or www/non-www variations
-      if (new URL(url).origin === baseUrl || url.includes("proofpopify.com")) {
-        return url;
-      }
-      return baseUrl;
-    },
+    // async redirect({ url, baseUrl }) {
+    //   // Allows relative callback URLs
+    //   if (url.startsWith("/")) return new URL(url, baseUrl).toString();
+    //   // Allows callback URLs on the same origin or www/non-www variations
+    //   if (new URL(url).origin === baseUrl || url.includes("proofpopify.com")) {
+    //     return url;
+    //   }
+    //   return baseUrl;
+    // },
   },
   pages: {
     signIn: "/login",

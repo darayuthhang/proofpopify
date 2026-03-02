@@ -6,7 +6,9 @@ http://localhost:3000/api/auth/callback/google
 
 http://localhost:3000
 
+
+Prod we need to add www to be consistency
 https://www.proofpopify.com
 
 https://www.proofpopify.com/api/auth/callback/google
-sadssssss
+sadsssssss
