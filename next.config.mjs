@@ -1,10 +1,46 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Security headers
   async headers() {
     return [
+      // Permissive headers for the embed script (loaded cross-origin by other sites)
       {
-        source: "/(.*)",
+        source: "/embed.js",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Cache-Control",
+            value: "public, max-age=300, s-maxage=300",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+      // Permissive CORS headers for the public API (used by embed script)
+      {
+        source: "/api/public/:path*",
+        headers: [
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+          {
+            key: "Access-Control-Allow-Methods",
+            value: "GET, OPTIONS",
+          },
+          {
+            key: "Access-Control-Allow-Headers",
+            value: "Content-Type, Authorization",
+          },
+        ],
+      },
+      // Security headers for everything EXCEPT embed.js and public API
+      {
+        source: "/((?!embed\\.js|api/public).*)",
         headers: [
           {
             key: "X-Frame-Options",

@@ -5,6 +5,7 @@ export async function proxy(request) {
   const token = await getToken({
     req: request,
     secret: process.env.NEXTAUTH_SECRET,
+    //this has to add to make it works in productions
     secureCookie: process.env.NODE_ENV === "production", // Explicitly tell it to look for __Secure- tokens
   });
 

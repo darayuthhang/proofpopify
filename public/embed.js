@@ -22,9 +22,14 @@
     }
 
     init() {
-      const scriptTag = document.currentScript || document.querySelector('script[src*="embed.js"]');
+      // Try multiple strategies to find the script tag.
+      // document.currentScript only works during synchronous execution,
+      // so it fails when the script is loaded with async/defer.
+      const scriptTag = document.currentScript
+        || document.querySelector('script[data-proofpopify]')
+        || document.querySelector('script[src*="embed.js"]');
       if (!scriptTag) {
-        console.error("ProofPopify: Embed script tag not found.");
+        console.error("ProofPopify: Embed script tag not found. Make sure the script tag has a 'data-proofpopify' attribute or its src contains 'embed.js'.");
         return;
       }
 
@@ -284,6 +289,21 @@
     async fetchData() {
       try {
         const res = await fetch(`${this.apiBase}/api/public/transactions?proof_id=${this.startupId}`);
+        
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}));
+          console.error(`ProofPopify: API returned ${res.status} - ${errorData.error || 'Unknown error'}`);
+          
+          // Still allow test mode to show dummy data even if API fails
+          if (this.isTest) {
+            this.transactions = [
+              { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
+            ];
+            this.startCycle();
+          }
+          return;
+        }
+
         const data = await res.json();
         
         if (data.transactions && data.transactions.length > 0) {
@@ -317,9 +337,19 @@
           if (forcePosition) this.position = forcePosition;
 
           this.startCycle();
+        } else {
+          console.warn('ProofPopify: No transactions found. The popup will not appear.');
         }
       } catch (err) {
         console.error("ProofPopify: Error fetching data", err);
+        
+        // Allow test mode fallback even on network errors
+        if (this.isTest) {
+          this.transactions = [
+            { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
+          ];
+          this.startCycle();
+        }
       }
     }
 
