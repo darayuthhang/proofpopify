@@ -1,1 +1,2 @@
-export { proxy as middleware, config } from "./src/proxy.js";
+// This file is intentionally empty.
+// Middleware is handled by src/proxy.js using the Next.js proxy convention.
