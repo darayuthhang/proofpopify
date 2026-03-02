@@ -20,7 +20,7 @@ export default function StripeIntegrationCard({ startup }) {
     setIsLoadingTx(true);
     setTxError(null);
     try {
-      const res = await fetch(`/api/public/transactions?startupId=${startup.id}`);
+      const res = await fetch(`/api/public/transactions?proof_id=${startup.proof_id}`);
       const data = await res.json();
       if (res.ok && data.transactions) {
         setTransactions(data.transactions);
