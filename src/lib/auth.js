@@ -154,4 +154,16 @@ export const authOptions = {
     signIn: "/login",
   },
   secret: process.env.NEXTAUTH_SECRET,
+  cookies: process.env.NODE_ENV === "production" ? {
+    sessionToken: {
+      name: `__Secure-next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: true,
+        domain: ".proofpopify.com", // leading dot = works on www AND non-www
+      },
+    },
+  } : {},
 };
