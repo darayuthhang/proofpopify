@@ -2,6 +2,7 @@ export const APP_NAME = "ProofPopify";
 export const APP_DOMAIN = "proofpopify.com";
 export const HERO_BUTTON_TEXT = "Get Started for Free";
 export const HERO_BUTTON_LINK = "/register";
+export const LIMIT_TRANSACTION = 5;
 
 export const PRICING_TIERS = [
   {

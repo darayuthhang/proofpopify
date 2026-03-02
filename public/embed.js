@@ -53,34 +53,76 @@
       const style = document.createElement('style');
       style.id = 'proofpopify-styles';
       style.innerHTML = `
+        @keyframes proofpopify-slideUp {
+          from { opacity: 0; transform: translateY(20px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes proofpopify-slideDown {
+          from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes proofpopify-fadeOut {
+          from { opacity: 1; transform: translateY(0) scale(1); }
+          to { opacity: 0; transform: translateY(10px) scale(0.95); }
+        }
+        @keyframes proofpopify-pulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.15); }
+          100% { transform: scale(1); }
+        }
+        @keyframes proofpopify-ring {
+          0% { transform: rotate(0deg); }
+          15% { transform: rotate(12deg); }
+          30% { transform: rotate(-10deg); }
+          45% { transform: rotate(8deg); }
+          60% { transform: rotate(-6deg); }
+          75% { transform: rotate(3deg); }
+          100% { transform: rotate(0deg); }
+        }
+        @keyframes proofpopify-shimmer {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        #proofpopify-container.ppfy-animate-in-bottom {
+          animation: proofpopify-slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        #proofpopify-container.ppfy-animate-in-top {
+          animation: proofpopify-slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+        #proofpopify-container.ppfy-animate-out {
+          animation: proofpopify-fadeOut 0.4s ease-in forwards;
+        }
+        #proofpopify-emoji {
+          animation: proofpopify-pulse 0.6s ease-in-out 0.3s 1;
+          display: inline-block;
+        }
+        #proofpopify-bell {
+          animation: proofpopify-ring 0.6s ease-in-out 0.1s 1;
+          display: inline-block;
+          transform-origin: top center;
+        }
         @media (max-width: 640px) {
           #proofpopify-container {
-            /* Align to left smoothly without stretching to right */
-            left: 16px !important;
-            right: auto !important;
+            left: 12px !important;
+            right: 12px !important;
           }
-          /* Force bottom positioning on mobile for better UX */
           #proofpopify-container.mobile-bottom {
-            bottom: 16px !important;
+            bottom: 12px !important;
             top: auto !important;
           }
-          /* Force top positioning on mobile */
           #proofpopify-container.mobile-top {
-            top: 16px !important;
+            top: 12px !important;
             bottom: auto !important;
           }
-          /* Make the card smaller instead of full width */
           #proofpopify-container > div {
-            width: max-content !important;
-            max-width: 280px !important;  
+            width: 100% !important;
+            max-width: 100% !important;
             padding: 12px 14px !important;
             box-sizing: border-box;
           }
-          /* Shrink the text slightly */
           #proofpopify-container p {
             font-size: 13px !important;
           }
-          /* Shrink the metadata row slightly */
           #proofpopify-container span, #proofpopify-container a {
             font-size: 11px !important;
           }
@@ -101,40 +143,81 @@
         position: 'fixed',
         zIndex: '999999',
         opacity: '0',
-        transition: 'opacity 0.5s ease-in-out',
         pointerEvents: 'none',
         fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
       });
       this.elements.container = container;
 
-      // this is where we change style of Card
+      // Card
       const card = document.createElement('div');
       Object.assign(card.style, {
         backgroundColor: this.backgroundColor,
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        borderRadius: '12px',
-        padding: '16px',
+        boxShadow: '0 20px 30px -8px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.08)',
+        borderRadius: '14px',
+        padding: '14px 16px',
         display: 'flex',
         alignItems: 'center',
-        gap: '8px',
+        gap: '12px',
         border: '1px solid #e5e7eb',
         width: 'max-content',
-        maxWidth: '350px',
-        boxSizing: 'border-box'
+        maxWidth: '370px',
+        boxSizing: 'border-box',
+        position: 'relative',
+        overflow: 'hidden'
       });
       this.elements.card = card;
+
+      // Shimmer overlay (subtle premium shine effect)
+      const shimmer = document.createElement('div');
+      Object.assign(shimmer.style, {
+        position: 'absolute',
+        top: '0',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)',
+        backgroundSize: '200% 100%',
+        animation: 'proofpopify-shimmer 2s ease-in-out 0.5s 1',
+        pointerEvents: 'none',
+        borderRadius: '14px'
+      });
+      card.appendChild(shimmer);
+
+      // Emoji icon container
+      const emojiContainer = document.createElement('div');
+      Object.assign(emojiContainer.style, {
+        width: '42px',
+        height: '42px',
+        borderRadius: '12px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '22px',
+        flexShrink: '0',
+        position: 'relative'
+      });
+      this.elements.emojiContainer = emojiContainer;
+
+      const emojiSpan = document.createElement('span');
+      emojiSpan.id = 'proofpopify-emoji';
+      emojiSpan.textContent = '🎉';
+      emojiContainer.appendChild(emojiSpan);
+      this.elements.emojiSpan = emojiSpan;
 
       // Text Container
       const textContainer = document.createElement('div');
       textContainer.style.display = 'flex';
       textContainer.style.flexDirection = 'column';
+      textContainer.style.gap = '3px';
+      textContainer.style.position = 'relative';
 
       // Title Row
       const titleRow = document.createElement('p');
-      Object.assign(titleRow.style, { margin: '0', fontSize: this.headingFontSize, fontWeight: '500', color: '#374151' });
+      Object.assign(titleRow.style, { margin: '0', fontSize: this.headingFontSize, fontWeight: '500', color: '#374151', lineHeight: '1.4' });
       this.elements.titleRow = titleRow;
 
       const nameSpan = document.createElement('span');
+      nameSpan.style.fontWeight = '700';
       this.elements.nameSpan = nameSpan;
 
       const inTextNode = document.createTextNode(' in ');
@@ -151,11 +234,16 @@
 
       // Meta Row
       const metaRow = document.createElement('div');
-      Object.assign(metaRow.style, { display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' });
+      Object.assign(metaRow.style, { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' });
 
+      // Time with a small clock
       const timeSpan = document.createElement('span');
-      Object.assign(timeSpan.style, { fontSize: '12px', color: '#6b7280' });
+      Object.assign(timeSpan.style, { fontSize: '12px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '3px' });
       this.elements.timeSpan = timeSpan;
+
+      // Dot separator
+      const dot = document.createElement('span');
+      Object.assign(dot.style, { width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#d1d5db', flexShrink: '0' });
 
       // Verify Link
       const verifyLink = document.createElement('a');
@@ -165,38 +253,40 @@
       Object.assign(verifyLink.style, {
         display: 'flex',
         alignItems: 'center',
-        gap: '4px',
+        gap: '3px',
         textDecoration: 'none',
         cursor: 'pointer',
-        transition: 'opacity 0.2s ease-in-out'
+        transition: 'opacity 0.2s ease-in-out',
+        opacity: '0.7'
       });
       verifyLink.onmouseover = function() { this.style.opacity = '1'; };
-      verifyLink.onmouseout = function() { this.style.opacity = '0.8'; };
+      verifyLink.onmouseout = function() { this.style.opacity = '0.7'; };
       this.elements.verifyLink = verifyLink;
 
       const verifyIcon = document.createElement('div');
       verifyIcon.style.display = 'flex';
-      verifyIcon.innerHTML = `<svg style="width:16px; height:16px;" fill="currentColor" viewBox="0 0 20 20">
+      verifyIcon.innerHTML = `<svg style="width:14px; height:14px;" fill="currentColor" viewBox="0 0 20 20">
         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
       </svg>`;
       this.elements.verifyIcon = verifyIcon;
 
       const verifyText = document.createElement('span');
-      Object.assign(verifyText.style, { fontSize: '12px', display: 'flex', gap: '3px' });
-      verifyText.innerHTML = `Verified by <span style="color: #635BFF; font-weight: 600; opacity: 1;">Stripe</span>`;
+      Object.assign(verifyText.style, { fontSize: '11px', display: 'flex', gap: '2px' });
+      verifyText.innerHTML = `Verified by <span style="color: #635BFF; font-weight: 600;">Stripe</span>`;
       this.elements.verifyText = verifyText;
 
       verifyLink.append(verifyIcon, verifyText);
-      metaRow.append(timeSpan, document.createTextNode(' | '), verifyLink);
+      metaRow.append(timeSpan, dot, verifyLink);
 
       textContainer.append(titleRow, metaRow);
+      card.appendChild(emojiContainer);
       card.appendChild(textContainer);
       container.appendChild(card);
       document.body.appendChild(container);
     }
 
     applyStyles() {
-      const { card, container, titleRow, timeSpan, verifyLink, verifyText, verifyIcon } = this.elements;
+      const { card, container, titleRow, timeSpan, verifyLink, verifyText, verifyIcon, emojiContainer } = this.elements;
       
       card.style.backgroundColor = this.backgroundColor;
       card.style.border = `1px solid ${this.getBorderColor(this.backgroundColor)}`;
@@ -204,11 +294,14 @@
       const textColor = this.getContrastYIQ(this.backgroundColor);
       titleRow.style.color = textColor;
       timeSpan.style.color = textColor;
-      verifyLink.style.opacity = '0.8';
+      verifyLink.style.opacity = '0.7';
       verifyText.style.color = textColor;
       timeSpan.style.opacity = '0.6';
       verifyText.style.opacity = '0.8';
       verifyIcon.style.color = this.themeColor;
+
+      // Emoji background uses theme color with transparency
+      emojiContainer.style.backgroundColor = this.themeColor + '18';
 
       // Position
       Object.assign(container.style, { top: 'auto', bottom: 'auto', left: 'auto', right: 'auto' });
@@ -236,12 +329,24 @@
       }
     }
 
+    getEmoji() {
+      const emojis = ['🎉', '🔥', '⚡', '💳', '🛒', '✨', '🚀', '💰'];
+      return emojis[Math.floor(Math.random() * emojis.length)];
+    }
+
     showNotification() {
       if (this.transactions.length === 0) return;
       const currentTx = this.transactions[this.currentIndex];
-      const { nameSpan, inTextNode, locationSpan, actionTextNode, timeSpan, container } = this.elements;
+      const { nameSpan, inTextNode, locationSpan, actionTextNode, timeSpan, container, emojiSpan } = this.elements;
 
       this.applyStyles();
+
+      // Randomize emoji each time for liveness
+      emojiSpan.textContent = this.getEmoji();
+      // Re-trigger pulse animation
+      emojiSpan.style.animation = 'none';
+      emojiSpan.offsetHeight; // force reflow
+      emojiSpan.style.animation = 'proofpopify-pulse 0.6s ease-in-out 0.3s 1';
 
       // Content
       actionTextNode.nodeValue = ` ${this.actionText}`;
@@ -272,17 +377,30 @@
           verifyLink.href = `${this.apiBase}/verified?proof_id=${this.startupId}`;
       }
 
-      // Fade In
+      // Slide In (direction based on position)
+      container.classList.remove('ppfy-animate-out', 'ppfy-animate-in-top', 'ppfy-animate-in-bottom');
       container.style.opacity = '1';
       container.style.pointerEvents = 'auto';
+      
+      if (this.position.includes('top')) {
+        container.classList.add('ppfy-animate-in-top');
+      } else {
+        container.classList.add('ppfy-animate-in-bottom');
+      }
       this.isVisible = true;
 
-      // Fade Out after 4s
+      // Slide Out after 4s
       setTimeout(() => {
-        container.style.opacity = '0';
-        container.style.pointerEvents = 'none';
-        this.isVisible = false;
-        this.currentIndex = (this.currentIndex + 1) % this.transactions.length;
+        container.classList.remove('ppfy-animate-in-top', 'ppfy-animate-in-bottom');
+        container.classList.add('ppfy-animate-out');
+        
+        setTimeout(() => {
+          container.style.opacity = '0';
+          container.style.pointerEvents = 'none';
+          container.classList.remove('ppfy-animate-out');
+          this.isVisible = false;
+          this.currentIndex = (this.currentIndex + 1) % this.transactions.length;
+        }, 400);
       }, 4000);
     }
 

@@ -66,7 +66,7 @@ export async function GET(request) {
 
     // Try fetching recent charges
     const charges = await stripe.charges.list({
-      limit: 10, // Fetch up to 10 latest successful transactions
+      limit: constants.LIMIT_TRANSACTION, // Fetch up to 5 latest successful transactions
     });
 
     const recentTransactions = charges.data.map((charge) => {
