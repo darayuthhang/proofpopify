@@ -60,6 +60,11 @@ export async function PUT(request, { params }) {
     if (reqData.position && typeof reqData.position === "string") {
       updates.position = reqData.position;
     }
+
+    // Process Show Icon
+    if (reqData.showIcon !== undefined) {
+      updates.showIcon = reqData.showIcon === true || reqData.showIcon === "true";
+    }
     
     // Process Name
     if (reqData.name && typeof reqData.name === "string") {

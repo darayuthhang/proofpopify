@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import Stripe from "stripe";
-
+import { AVATAR_API_URL } from "@/lib/constants";
 // Handle CORS preflight requests
 export async function OPTIONS() {
   const headers = new Headers({
@@ -40,6 +40,7 @@ export async function GET(request) {
         backgroundColor: true,
         actionText: true,
         showRealNames: true,
+        showIcon: true,
         position: true
       },
     });
@@ -66,7 +67,7 @@ export async function GET(request) {
 
     // Try fetching recent charges
     const charges = await stripe.charges.list({
-      limit: constants.LIMIT_TRANSACTION, // Fetch up to 5 latest successful transactions
+      limit: 5, // Fetch up to 5 latest successful transactions
     });
 
     const recentTransactions = charges.data.map((charge) => {
@@ -102,8 +103,10 @@ export async function GET(request) {
       backgroundColor: startup.backgroundColor,
       actionText: startup.actionText,
       showRealNames: startup.showRealNames,
+      showIcon: startup.showIcon,
       position: startup.position,
-      startupName: startup.name
+      startupName: startup.name,
+      avatarUrlBase: AVATAR_API_URL
     }, {
       headers: corsHeaders
     });

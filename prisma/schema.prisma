@@ -46,6 +46,7 @@ model Startup {
   proof_id            String @unique @default(cuid()) 
   actionText          String   @default("subscribed")
   showRealNames       Boolean  @default(true)
+  showIcon            Boolean  @default(true)
   position            String   @default("bottom-left")
   isActive            Boolean  @default(true)
   createdAt           DateTime @default(now())

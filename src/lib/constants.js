@@ -4,6 +4,9 @@ export const HERO_BUTTON_TEXT = "Get Started for Free";
 export const HERO_BUTTON_LINK = "/register";
 export const LIMIT_TRANSACTION = 5;
 
+// Global Avatar Source - Change this once to update all avatars system-wide
+export const AVATAR_API_URL = "https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed=";
+
 export const PRICING_TIERS = [
   {
     name: "Starter",
@@ -44,4 +47,6 @@ export const constants = {
   PRICING_TIERS,
   HERO_BUTTON_TEXT,
   HERO_BUTTON_LINK,
+  LIMIT_TRANSACTION,
+  AVATAR_API_URL,
 }

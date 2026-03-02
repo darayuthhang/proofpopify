@@ -11,6 +11,8 @@ export default function DesignSettingsCard({
   setActionText,
   showRealNames,
   setShowRealNames,
+  showIcon,
+  setShowIcon,
   position,
   setPosition,
   handleSaveDesign,
@@ -125,6 +127,20 @@ export default function DesignSettingsCard({
               className="toggle toggle-primary" 
               checked={showRealNames}
               onChange={(e) => setShowRealNames(e.target.checked)}
+            />
+          </div>
+
+          {/* Show Icon Toggle */}
+          <div className="flex items-center justify-between p-3 bg-base-200/50 rounded-lg">
+            <div>
+              <span className="label-text font-medium block">Show Customer Avatar</span>
+              <span className="text-xs text-base-content/60">Display an illustrative avatar next to the popup text.</span>
+            </div>
+            <input 
+              type="checkbox" 
+              className="toggle toggle-primary" 
+              checked={showIcon}
+              onChange={(e) => setShowIcon(e.target.checked)}
             />
           </div>
 

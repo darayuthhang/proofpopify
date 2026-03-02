@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { HiCodeBracket, HiClipboard, HiCheckBadge } from "react-icons/hi2";
+import { AVATAR_API_URL } from "@/lib/constants";
 
 export default function EmbedCodeCard({
   startupId,
@@ -12,6 +13,7 @@ export default function EmbedCodeCard({
   backgroundColor,
   actionText,
   showRealNames,
+  showIcon,
   isTestModeEnabled,
   setIsTestModeEnabled
 }) {
@@ -43,7 +45,8 @@ export default function EmbedCodeCard({
     size = "normal",
     customerName = "Someone",
     city = "New York",
-    country = "United States"
+    country = "United States",
+    showIcon = false
   }) => {
     const isSmall = size === "small";
     const displayName = realName ? customerName : "Someone";
@@ -69,6 +72,27 @@ export default function EmbedCodeCard({
           boxShadow: isSmall ? "none" : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
         }}
       >
+        {showIcon && (
+          <div style={{
+            width: '42px',
+            height: '42px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: '0',
+            backgroundColor: '#f3f4f6',
+            border: '2px solid #ffffff',
+            boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+            overflow: 'hidden'
+          }}>
+            <img 
+              src={`${AVATAR_API_URL}${encodeURIComponent(displayName)}`} 
+              alt="Avatar" 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          </div>
+        )}
         <div className="flex flex-col">
           <p
             className="m-0 leading-tight"
@@ -167,6 +191,7 @@ export default function EmbedCodeCard({
           bg={backgroundColor} 
           action={actionText} 
           realName={showRealNames} 
+          showIcon={showIcon}
         />
         
         <div className="mt-4 pt-4 border-t border-gray-700">

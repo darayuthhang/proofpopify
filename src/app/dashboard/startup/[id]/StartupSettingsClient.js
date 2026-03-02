@@ -16,6 +16,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   const [backgroundColor, setBackgroundColor] = useState(startup.backgroundColor || "#ffffff");
   const [actionText, setActionText] = useState(startup.actionText || "subscribed");
   const [showRealNames, setShowRealNames] = useState(startup.showRealNames);
+  const [showIcon, setShowIcon] = useState(startup.showIcon ?? false);
   const [position, setPosition] = useState(startup.position || "bottom-left");
 
   const [isSavingDesign, setIsSavingDesign] = useState(false);
@@ -35,6 +36,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           bg: backgroundColor,
           action: actionText,
           realNames: showRealNames.toString(),
+          showIcon: showIcon.toString(),
           position: position
         });
         script.src = `${apiBaseUrl || window.location.origin}/embed.js?${queryParams.toString()}`;
@@ -55,7 +57,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
       const container = document.getElementById("proofpopify-container");
       if (container) container.remove();
     };
-  }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, position]);
+  }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, position]);
 
   const handleSaveDesign = async () => {
     setIsSavingDesign(true);
@@ -70,6 +72,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           backgroundColor,
           actionText,
           showRealNames,
+          showIcon,
           position
         }),
       });
@@ -103,6 +106,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor}
             actionText={actionText} setActionText={setActionText}
             showRealNames={showRealNames} setShowRealNames={setShowRealNames}
+            showIcon={showIcon} setShowIcon={setShowIcon}
             position={position} setPosition={setPosition}
             handleSaveDesign={handleSaveDesign}
             isSavingDesign={isSavingDesign}
@@ -121,6 +125,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             backgroundColor={backgroundColor}
             actionText={actionText}
             showRealNames={showRealNames}
+            showIcon={showIcon}
             isTestModeEnabled={isTestModeEnabled}
             setIsTestModeEnabled={setIsTestModeEnabled}
           />

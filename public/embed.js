@@ -11,7 +11,9 @@
       this.backgroundColor = '#ffffff';
       this.actionText = 'subscribed';
       this.showRealNames = true;
+      this.showIcon = false;
       this.position = 'bottom-left';
+      this.avatarUrlBase = "https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed="; // Fallback
 
       this.headingFontSize = '14px';
       this.bodyFontSize = '12px';
@@ -104,7 +106,7 @@
         @media (max-width: 640px) {
           #proofpopify-container {
             left: 12px !important;
-            right: 12px !important;
+            right: auto !important;
           }
           #proofpopify-container.mobile-bottom {
             bottom: 12px !important;
@@ -115,20 +117,26 @@
             bottom: auto !important;
           }
           #proofpopify-container > div {
-            width: 100% !important;
-            max-width: 100% !important;
-            padding: 12px 14px !important;
+            width: max-content !important;
+            max-width: calc(100vw - 24px) !important;
+            padding: 10px 12px !important;
             box-sizing: border-box;
           }
           #proofpopify-container p {
-            font-size: 13px !important;
+            font-size: 12px !important;
           }
           #proofpopify-container span, #proofpopify-container a {
-            font-size: 11px !important;
+            font-size: 10px !important;
           }
           #proofpopify-container svg {
-            width: 14px !important;
-            height: 14px !important;
+            width: 12px !important;
+            height: 12px !important;
+          }
+          #proofpopify-emoji-wrap {
+            width: 32px !important;
+            height: 32px !important;
+            font-size: 16px !important;
+            border-radius: 8px !important;
           }
         }
       `;
@@ -183,24 +191,32 @@
       });
       card.appendChild(shimmer);
 
-      // Emoji icon container
+      // Avatar icon container (hidden by default, shown if showIcon is true)
       const emojiContainer = document.createElement('div');
+      emojiContainer.id = 'proofpopify-avatar-wrap';
       Object.assign(emojiContainer.style, {
         width: '42px',
         height: '42px',
-        borderRadius: '12px',
-        display: 'flex',
+        borderRadius: '50%', // Circle for avatars
+        display: 'none',
         alignItems: 'center',
         justifyContent: 'center',
-        fontSize: '22px',
         flexShrink: '0',
-        position: 'relative'
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: '#f3f4f6', // Light gray background for the avatar
+        border: '2px solid #ffffff',
+        boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
       });
       this.elements.emojiContainer = emojiContainer;
 
-      const emojiSpan = document.createElement('span');
-      emojiSpan.id = 'proofpopify-emoji';
-      emojiSpan.textContent = '🎉';
+      const emojiSpan = document.createElement('img');
+      emojiSpan.id = 'proofpopify-avatar-img';
+      Object.assign(emojiSpan.style, {
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover'
+      });
       emojiContainer.appendChild(emojiSpan);
       this.elements.emojiSpan = emojiSpan;
 
@@ -300,8 +316,10 @@
       verifyText.style.opacity = '0.8';
       verifyIcon.style.color = this.themeColor;
 
-      // Emoji background uses theme color with transparency
-      emojiContainer.style.backgroundColor = this.themeColor + '18';
+      // Instead of theme background, avatar uses its own styling set in createDOM
+
+      // Show/hide icon based on setting
+      emojiContainer.style.display = this.showIcon ? 'flex' : 'none';
 
       // Position
       Object.assign(container.style, { top: 'auto', bottom: 'auto', left: 'auto', right: 'auto' });
@@ -329,9 +347,10 @@
       }
     }
 
-    getEmoji() {
-      const emojis = ['🎉', '🔥', '⚡', '💳', '🛒', '✨', '🚀', '💰'];
-      return emojis[Math.floor(Math.random() * emojis.length)];
+    getAvatarUrl(name) {
+      // Use dynamic global avatar URL set by the server
+      const safeName = encodeURIComponent(name || "Someone");
+      return `${this.avatarUrlBase}${safeName}`;
     }
 
     showNotification() {
@@ -340,17 +359,19 @@
       const { nameSpan, inTextNode, locationSpan, actionTextNode, timeSpan, container, emojiSpan } = this.elements;
 
       this.applyStyles();
+      
+      const displayName = this.showRealNames ? (currentTx.name || "Someone") : "Someone";
 
-      // Randomize emoji each time for liveness
-      emojiSpan.textContent = this.getEmoji();
-      // Re-trigger pulse animation
+      // Set avatar image
+      emojiSpan.src = this.getAvatarUrl(displayName);
+      // Re-trigger pulse animation slightly modified for avatar
       emojiSpan.style.animation = 'none';
       emojiSpan.offsetHeight; // force reflow
-      emojiSpan.style.animation = 'proofpopify-pulse 0.6s ease-in-out 0.3s 1';
+      emojiSpan.style.animation = 'proofpopify-pulse 0.6s ease-in-out 0.2s 1';
 
       // Content
       actionTextNode.nodeValue = ` ${this.actionText}`;
-      nameSpan.innerText = this.showRealNames ? (currentTx.name || "Someone") : "Someone";
+      nameSpan.innerText = displayName;
       
       let locationText = "";
       if (currentTx.city && currentTx.city !== "Unknown City") {
@@ -439,7 +460,9 @@
           if (data.backgroundColor) this.backgroundColor = data.backgroundColor;
           if (data.actionText) this.actionText = data.actionText;
           if (data.showRealNames !== undefined) this.showRealNames = data.showRealNames;
+          if (data.showIcon !== undefined) this.showIcon = data.showIcon;
           if (data.position) this.position = data.position;
+          if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
           
           // Test overrides
           const forceTheme = this.urlObj.searchParams.get('theme');
@@ -452,6 +475,8 @@
           if (forceBg) this.backgroundColor = decodeURIComponent(forceBg);
           if (forceAction) this.actionText = decodeURIComponent(forceAction);
           if (forceRealNames !== null) this.showRealNames = forceRealNames === 'true';
+          const forceShowIcon = this.urlObj.searchParams.get('showIcon');
+          if (forceShowIcon !== null) this.showIcon = forceShowIcon === 'true';
           if (forcePosition) this.position = forcePosition;
 
           this.startCycle();
