@@ -125,10 +125,10 @@ export default function EmbedCodeCard({
               href="/verified" 
               target="_blank" 
               rel="noreferrer"
-              style={{ fontSize: "12px", color: textColor, opacity: 0.6, textDecoration: "none", display: "flex", gap: "3px", transition: "opacity 0.2s" }}
+              style={{ fontSize: "12px", color: textColor, textDecoration: "none", display: "flex", gap: "3px", transition: "opacity 0.2s" }}
               className="hover:opacity-100"
             >
-              Verified by <span style={{ color: "#635BFF", fontWeight: "600", opacity: 1 }}>Stripe</span>
+              <span style={{ opacity: 0.6 }}>Verified by</span> <span style={{ color: '#422ad5', fontWeight: "600" }}>Stripe</span>
             </a>
           </div>
         </div>

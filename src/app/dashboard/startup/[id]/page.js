@@ -35,7 +35,7 @@ export default async function StartupPage({ params }) {
     backgroundColor: startup.backgroundColor || "#ffffff",
     actionText: startup.actionText || "subscribed",
     showRealNames: startup.showRealNames ?? true,
-    showIcon: startup.showIcon ?? false,
+    showIcon: startup.showIcon ?? true,
     position: startup.position || "bottom-left",
     isKeySet,
   };

@@ -11,7 +11,7 @@
       this.backgroundColor = '#ffffff';
       this.actionText = 'subscribed';
       this.showRealNames = true;
-      this.showIcon = false;
+      this.showIcon = true;
       this.position = 'bottom-left';
       this.avatarUrlBase = "https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed="; // Fallback
 
@@ -288,7 +288,7 @@
 
       const verifyText = document.createElement('span');
       Object.assign(verifyText.style, { fontSize: '11px', display: 'flex', gap: '2px' });
-      verifyText.innerHTML = `Verified by <span style="color: #635BFF; font-weight: 600;">Stripe</span>`;
+      // InnerHTML is set dynamically in applyStyles to handle dark/light contrast
       this.elements.verifyText = verifyText;
 
       verifyLink.append(verifyIcon, verifyText);
@@ -313,8 +313,11 @@
       verifyLink.style.opacity = '0.7';
       verifyText.style.color = textColor;
       timeSpan.style.opacity = '0.6';
-      verifyText.style.opacity = '0.8';
       verifyIcon.style.color = this.themeColor;
+      
+      // Update Stripe text color
+      const stripeColor = '#422ad5';
+      verifyText.innerHTML = `<span style="opacity: 0.6">Verified by</span> <span style="color: ${stripeColor}; font-weight: 600;">Stripe</span>`;
 
       // Instead of theme background, avatar uses its own styling set in createDOM
 
@@ -438,6 +441,10 @@
             this.transactions = [
               { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
             ];
+
+            // Parse URL overrides even on error so test preview features still work
+            this.parseTestOverrides();
+
             this.startCycle();
           }
           return;
@@ -465,19 +472,7 @@
           if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
           
           // Test overrides
-          const forceTheme = this.urlObj.searchParams.get('theme');
-          const forceBg = this.urlObj.searchParams.get('bg');
-          const forceAction = this.urlObj.searchParams.get('action');
-          const forceRealNames = this.urlObj.searchParams.get('realNames');
-          const forcePosition = this.urlObj.searchParams.get('position');
-
-          if (forceTheme) this.themeColor = decodeURIComponent(forceTheme);
-          if (forceBg) this.backgroundColor = decodeURIComponent(forceBg);
-          if (forceAction) this.actionText = decodeURIComponent(forceAction);
-          if (forceRealNames !== null) this.showRealNames = forceRealNames === 'true';
-          const forceShowIcon = this.urlObj.searchParams.get('showIcon');
-          if (forceShowIcon !== null) this.showIcon = forceShowIcon === 'true';
-          if (forcePosition) this.position = forcePosition;
+          this.parseTestOverrides();
 
           this.startCycle();
         } else {
@@ -491,9 +486,27 @@
           this.transactions = [
             { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
           ];
+          this.parseTestOverrides();
           this.startCycle();
         }
       }
+    }
+
+    parseTestOverrides() {
+      if (!this.isTest) return;
+      const forceTheme = this.urlObj.searchParams.get('theme');
+      const forceBg = this.urlObj.searchParams.get('bg');
+      const forceAction = this.urlObj.searchParams.get('action');
+      const forceRealNames = this.urlObj.searchParams.get('realNames');
+      const forcePosition = this.urlObj.searchParams.get('position');
+
+      if (forceTheme) this.themeColor = decodeURIComponent(forceTheme);
+      if (forceBg) this.backgroundColor = decodeURIComponent(forceBg);
+      if (forceAction) this.actionText = decodeURIComponent(forceAction);
+      if (forceRealNames !== null) this.showRealNames = forceRealNames === 'true';
+      const forceShowIcon = this.urlObj.searchParams.get('showIcon');
+      if (forceShowIcon !== null) this.showIcon = forceShowIcon === 'true';
+      if (forcePosition) this.position = forcePosition;
     }
 
     startCycle() {
