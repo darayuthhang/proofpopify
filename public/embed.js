@@ -12,6 +12,7 @@
       this.actionText = 'subscribed';
       this.showRealNames = true;
       this.showIcon = true;
+      this.showBorder = true;
       this.position = 'bottom-left';
       this.avatarUrlBase = "https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed="; // Fallback
 
@@ -172,13 +173,10 @@
       const card = document.createElement('div');
       Object.assign(card.style, {
         backgroundColor: this.backgroundColor,
-        boxShadow: '0 20px 30px -8px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.08)',
-        borderRadius: '14px',
         padding: '10px 14px',
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
-        border: '1px solid #e5e7eb',
         width: 'max-content',
         maxWidth: '370px',
         boxSizing: 'border-box',
@@ -189,6 +187,7 @@
 
       // Shimmer overlay (subtle premium shine effect)
       const shimmer = document.createElement('div');
+      shimmer.className = 'proofpopify-shimmer';
       Object.assign(shimmer.style, {
         position: 'absolute',
         top: '0',
@@ -216,9 +215,7 @@
         flexShrink: '0',
         position: 'relative',
         overflow: 'hidden',
-        backgroundColor: '#f3f4f6', // Light gray background for the avatar
-        border: '2px solid #ffffff',
-        boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+        backgroundColor: '#f3f4f6'
       });
       this.elements.emojiContainer = emojiContainer;
 
@@ -317,7 +314,28 @@
       const { card, container, titleRow, timeSpan, verifyLink, verifyText, verifyIcon, emojiContainer } = this.elements;
       
       card.style.backgroundColor = this.backgroundColor;
-      card.style.border = `1px solid ${this.getBorderColor(this.backgroundColor)}`;
+      
+      if (this.showBorder) {
+        card.style.border = `2px solid #000000`;
+        card.style.borderRadius = '6px';
+        card.style.boxShadow = '4px 4px 0px 0px rgba(0, 0, 0, 1)';
+        emojiContainer.style.border = '1px solid #000000';
+        emojiContainer.style.boxShadow = 'none';
+        
+        // Hide shimmer in border mode
+        const shimmerElem = card.querySelector('.proofpopify-shimmer');
+        if (shimmerElem) shimmerElem.style.display = 'none';
+      } else {
+        card.style.border = `1px solid ${this.getBorderColor(this.backgroundColor)}`;
+        card.style.borderRadius = '14px';
+        card.style.boxShadow = '0 20px 30px -8px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.08)';
+        emojiContainer.style.border = '2px solid #ffffff';
+        emojiContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
+        
+        // Show shimmer in normal mode
+        const shimmerElem = card.querySelector('.proofpopify-shimmer');
+        if (shimmerElem) shimmerElem.style.display = 'block';
+      }
       
       const textColor = this.getContrastYIQ(this.backgroundColor);
       titleRow.style.color = textColor;
@@ -471,6 +489,7 @@
           if (data.actionText) this.actionText = data.actionText;
           if (data.showRealNames !== undefined) this.showRealNames = data.showRealNames;
           if (data.showIcon !== undefined) this.showIcon = data.showIcon;
+          if (data.showBorder !== undefined) this.showBorder = data.showBorder;
           if (data.position) this.position = data.position;
           if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
 
@@ -490,13 +509,15 @@
       const forceAction = this.urlObj.searchParams.get('action');
       const forceRealNames = this.urlObj.searchParams.get('realNames');
       const forcePosition = this.urlObj.searchParams.get('position');
+      const forceShowIcon = this.urlObj.searchParams.get('showIcon');
+      const forceShowBorder = this.urlObj.searchParams.get('showBorder');
 
       if (forceTheme) this.themeColor = decodeURIComponent(forceTheme);
       if (forceBg) this.backgroundColor = decodeURIComponent(forceBg);
       if (forceAction) this.actionText = decodeURIComponent(forceAction);
       if (forceRealNames !== null) this.showRealNames = forceRealNames === 'true';
-      const forceShowIcon = this.urlObj.searchParams.get('showIcon');
       if (forceShowIcon !== null) this.showIcon = forceShowIcon === 'true';
+      if (forceShowBorder !== null) this.showBorder = forceShowBorder === 'true';
       if (forcePosition) this.position = forcePosition;
     }
 

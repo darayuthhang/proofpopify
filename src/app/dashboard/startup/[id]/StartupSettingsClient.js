@@ -6,6 +6,7 @@ import StripeIntegrationCard from "./StripeIntegrationCard";
 import DesignSettingsCard from "./DesignSettingsCard";
 import EmbedCodeCard from "./EmbedCodeCard";
 import RecentTransactionsCard from "./RecentTransactionsCard";
+import LivePreviewCard from "./LivePreviewCard";
 
 export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   const [actionText, setActionText] = useState(startup.actionText || "subscribed");
   const [showRealNames, setShowRealNames] = useState(startup.showRealNames);
   const [showIcon, setShowIcon] = useState(startup.showIcon ?? false);
+  const [showBorder, setShowBorder] = useState(startup.showBorder ?? true);
   const [position, setPosition] = useState(startup.position || "bottom-left");
 
   const [isSavingDesign, setIsSavingDesign] = useState(false);
@@ -38,6 +40,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           action: actionText,
           realNames: showRealNames.toString(),
           showIcon: showIcon.toString(),
+          showBorder: showBorder.toString(),
           position: position
         });
         script.src = `${apiBaseUrl || window.location.origin}/embed.js?${queryParams.toString()}`;
@@ -58,7 +61,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
       const container = document.getElementById("proofpopify-container");
       if (container) container.remove();
     };
-  }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, position]);
+  }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, showBorder, position]);
 
   const handleSaveDesign = async () => {
     setIsSavingDesign(true);
@@ -74,6 +77,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           actionText,
           showRealNames,
           showIcon,
+          showBorder,
           position
         }),
       });
@@ -94,9 +98,10 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
 
   return (
     <div className="h-full">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full items-stretch pb-10">
-        {/* Left Column - Scrollable (Stripe & Design Settings) */}
-        <div className="lg:col-span-7 h-full overflow-y-auto space-y-8 pr-2 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-stretch pb-10">
+        
+        {/* Left Column (Settings) */}
+        <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 pr-2 pb-10 custom-scrollbar">
           <StripeIntegrationCard startup={startup} />
           
           <DesignSettingsCard 
@@ -105,6 +110,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             actionText={actionText} setActionText={setActionText}
             showRealNames={showRealNames} setShowRealNames={setShowRealNames}
             showIcon={showIcon} setShowIcon={setShowIcon}
+            showBorder={showBorder} setShowBorder={setShowBorder}
             position={position} setPosition={setPosition}
             handleSaveDesign={handleSaveDesign}
             isSavingDesign={isSavingDesign}
@@ -112,23 +118,31 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           />
         </div>
 
-        {/* Right Column - Sticky Sidebar (Live Preview & Embed Code) */}
-        <div className="lg:col-span-5 h-full overflow-y-auto space-y-8 lg:pl-2 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <EmbedCodeCard 
-            startupId={startup.proof_id}
-            apiBaseUrl={apiBaseUrl}
-            message={message}
-            setMessage={setMessage}
+        {/* Center Column (Wide Live Preview) */}
+        <div className="lg:col-span-6 h-full overflow-y-auto space-y-6 lg:px-2 pb-10 custom-scrollbar">
+          <LivePreviewCard 
             themeColor={themeColor}
             backgroundColor={backgroundColor}
             actionText={actionText}
             showRealNames={showRealNames}
             showIcon={showIcon}
+            showBorder={showBorder}
             isTestModeEnabled={isTestModeEnabled}
             setIsTestModeEnabled={setIsTestModeEnabled}
           />
+        </div>
+
+        {/* Right Column (Embed Code & Transactions) */}
+        <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 lg:pl-2 pb-10 custom-scrollbar">
+          <EmbedCodeCard 
+            startupId={startup.proof_id}
+            apiBaseUrl={apiBaseUrl}
+            message={message}
+            setMessage={setMessage}
+          />
           <RecentTransactionsCard startup={startup} />
         </div>
+
       </div>
     </div>
   );

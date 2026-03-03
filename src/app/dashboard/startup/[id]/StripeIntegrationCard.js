@@ -44,7 +44,7 @@ export default function StripeIntegrationCard({ startup }) {
   return (
     <div className="space-y-8">
       {/* 1. Stripe Integration */}
-      <div className="card bg-base-100 shadow-xl border border-base-200">
+      <div className="card bg-base-100 shadow-xl border border-base-200" data-theme="cupcake">
         <div className="card-body">
           <h2 className="card-title text-xl flex items-center gap-2">
             <FaStripe className="w-8 h-8 text-[#635BFF]" />
@@ -92,18 +92,18 @@ export default function StripeIntegrationCard({ startup }) {
           <form onSubmit={handleSaveStripeKey} className="flex flex-col gap-3 mt-2">
             <input
               type="password"
-              placeholder={startup.isKeySet ? "rk_live_... (Key is set, enter to update)" : "rk_live_..."}
-              className="input input-bordered w-full"
+              placeholder={startup.isKeySet ? "rk_live_... (Key is set, enter to update)" : "rk_live_... (Paste your Restricted Key here)"}
+              className={`input input-bordered w-full ${!startup.isKeySet ? "ring-2 ring-[#FFD91A] border-[#FFD91A] bg-[#FFD91A]/10 text-black placeholder:text-black/50" : ""}`}
               value={stripeKeyInput}
               onChange={(e) => setStripeKeyInput(e.target.value)}
               required={!startup.isKeySet}
             />
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className={`btn w-full ${!startup.isKeySet ? "bg-[#FFD91A] text-black hover:bg-[#e5c317] border-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-pulse" : "btn-primary"}`}
               disabled={isSavingStripeKey || (!stripeKeyInput && startup.isKeySet)}
             >
-              {isSavingStripeKey ? <span className="loading loading-spinner text-white"></span> : "Save Key"}
+              {isSavingStripeKey ? <span className="loading loading-spinner text-current"></span> : (startup.isKeySet ? "Update Key" : "Save Key & Connect")}
             </button>
 
             {message.section === "stripe" && message.text && (

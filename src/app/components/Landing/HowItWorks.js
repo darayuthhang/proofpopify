@@ -3,46 +3,51 @@ import { HiOutlineKey, HiOutlinePaintBrush, HiOutlineCodeBracketSquare, HiOutlin
 export default function HowItWorks() {
   const steps = [
     {
-      title: "1. Connect Stripe Securely",
-      description: "Create a read-only Restricted API Key in your Stripe dashboard. We only ask for permission to read recent charges, keeping your account 100% secure.",
-      icon: <HiOutlineKey className="w-8 h-8 text-primary" />,
+      title: "1. Connect Stripe",
+      description: "Create a read-only Restricted API Key. We only ask for permission to read recent charges, keeping you 100% secure.",
+      icon: <HiOutlineKey className="w-8 h-8 text-black" strokeWidth={2} />,
+      bgColor: "bg-[#FFD91A]"
     },
     {
-      title: "2. Customize Your Widget",
-      description: "Match the popup to your brand. Choose your theme colors, widget position, and custom call-to-action text in our simple dashboard.",
-      icon: <HiOutlinePaintBrush className="w-8 h-8 text-secondary" />,
+      title: "2. Customize Widget",
+      description: "Match the popup to your brand. Choose your theme colors, widget position, and custom call-to-action text.",
+      icon: <HiOutlinePaintBrush className="w-8 h-8 text-black" strokeWidth={2} />,
+      bgColor: "bg-[#72DDA4]"
     },
     {
-      title: "3. Paste One Line of Code",
-      description: "Copy your unique embed script and paste it right before the closing </body> tag of your website. It works with Next.js, Webflow, WordPress, and more.",
-      icon: <HiOutlineCodeBracketSquare className="w-8 h-8 text-accent" />,
+      title: "3. Paste One Line",
+      description: "Copy your unique embed script and paste it into your website. Works with Next.js, Webflow, WordPress, and more.",
+      icon: <HiOutlineCodeBracketSquare className="w-8 h-8 text-black" strokeWidth={2} />,
+      bgColor: "bg-[#00B4D8]"
     }
   ];
 
   return (
-    <section className="py-24 bg-base-100">
-      <div className="container mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <div className="badge badge-secondary mb-4 uppercase font-bold tracking-widest text-xs">Simple Setup</div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-base-content mb-6 leading-tight">
-            Live on Your Site in <span className="text-primary">2 Minutes</span>
+    <section className="relative py-24 bg-white border-b-2 border-black overflow-hidden">
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-20">
+          <div className="inline-block text-black uppercase font-bold tracking-widest text-sm mb-4">
+            Simple Setup
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-black mb-6 leading-[1.1]">
+            Live on Your Site in 2 Minutes
           </h2>
-          <p className="text-base sm:text-lg text-base-content/70 leading-relaxed">
+          <p className="text-lg sm:text-xl text-black/70 font-medium leading-relaxed">
             No complex developer integration required. If you know how to copy and paste text, you can install ProofPopify.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto relative">
+        <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto relative">
           {/* Connecting line for desktop */}
-          <div className="hidden md:block absolute top-[4rem] left-[15%] right-[15%] h-0.5 bg-gradient-to-r from-base-200 via-primary/30 to-base-200 z-0"></div>
+          <div className="hidden md:block absolute top-[2.5rem] left-[16%] right-[16%] h-[2px] bg-black z-0"></div>
 
           {steps.map((step, idx) => (
-            <div key={idx} className="relative z-10 flex flex-col items-center text-center group">
-              <div className="w-20 h-20 bg-base-100 border-4 border-base-200 rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:scale-110 group-hover:border-primary transition-all duration-300">
+            <div key={idx} className="relative z-10 flex flex-col items-center text-center">
+              <div className={`w-20 h-20 ${step.bgColor} border-2 border-black rounded-lg flex items-center justify-center mb-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]`}>
                 {step.icon}
               </div>
-              <h3 className="text-2xl font-bold text-base-content mb-4">{step.title}</h3>
-              <p className="text-base-content/70 leading-relaxed max-w-sm">
+              <h3 className="text-xl font-bold text-black mb-3">{step.title}</h3>
+              <p className="text-black/70 font-medium leading-relaxed max-w-sm">
                 {step.description}
               </p>
             </div>
@@ -50,14 +55,14 @@ export default function HowItWorks() {
         </div>
 
         {/* Lightweight Performance Callout */}
-        <div className="mt-20 max-w-3xl mx-auto bg-base-200 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center gap-6 border border-base-300 shadow-sm hover:shadow-md transition-shadow">
-          <div className="w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center shrink-0">
-            <HiOutlineBolt className="w-8 h-8" />
+        <div className="mt-20 max-w-4xl mx-auto bg-white border-2 border-black rounded-lg p-8 sm:p-10 flex flex-col sm:flex-row items-center gap-6 shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+          <div className="w-16 h-16 bg-[#FFD91A] border-2 border-black rounded-full flex items-center justify-center shrink-0">
+            <HiOutlineBolt className="w-8 h-8 text-black" strokeWidth={2} />
           </div>
           <div className="text-center sm:text-left">
-            <h4 className="text-xl font-bold text-base-content mb-2">Ultra-Lightweight & Fast</h4>
-            <p className="text-base-content/70 text-sm sm:text-base leading-relaxed">
-              Our embed script is <strong>under 5KB</strong> and loads asynchronously. It will <strong>never</strong> slow down your page load speed or negatively affect your Google Core Web Vitals.
+            <h4 className="text-xl font-bold text-black mb-2">Ultra-Lightweight & Lightning Fast</h4>
+            <p className="text-black/70 text-base font-medium leading-relaxed">
+              Our embed script is <strong className="font-bold text-black">under 5KB</strong> and loads asynchronously. It will <strong className="font-bold text-black">never</strong> slow down your page load speed or negatively affect your Google Core Web Vitals.
             </p>
           </div>
         </div>

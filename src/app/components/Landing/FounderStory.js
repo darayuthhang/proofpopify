@@ -1,18 +1,16 @@
-
 import Link from "next/link";
 import { FaXTwitter } from "react-icons/fa6";
 
 export default function FounderStory() {
   return (
-    <section className="py-24 bg-base-200">
+    <section className="py-24 bg-[#FFD91A] border-b-2 border-black">
       <div className="container mx-auto px-6">
-        <div className="max-w-4xl mx-auto bg-base-100 rounded-3xl shadow-xl overflow-hidden border border-base-300">
+        <div className="max-w-4xl mx-auto bg-[#F9FAFB] rounded shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden border-2 border-black">
           <div className="grid md:grid-cols-5 gap-0">
             
             {/* Image Section */}
-            <div className="md:col-span-2 bg-[#635BFF]/10 relative min-h-[300px] flex items-center justify-center p-8">
-              <div className="w-48 h-48 sm:w-56 sm:h-56 relative rounded-full overflow-hidden shadow-2xl border-4 border-white">
-                {/* Using unavatar.io to pull the user's X/Twitter profile picture automatically */}
+            <div className="md:col-span-2 bg-[#72DDA4] border-b-2 md:border-b-0 md:border-r-2 border-black relative min-h-[300px] flex items-center justify-center p-8">
+              <div className="w-48 h-48 sm:w-56 sm:h-56 relative rounded-full overflow-hidden shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] border-2 border-black">
                 <img 
                   src="/my_profile.jpg"
                   alt="Darayuth H. - Founder of ProofPopify"
@@ -23,31 +21,33 @@ export default function FounderStory() {
 
             {/* Content Section */}
             <div className="md:col-span-3 p-8 sm:p-12 flex flex-col justify-center">
-              <div className="badge badge-primary mb-4 font-bold tracking-widest text-xs">FOUNDER'S STORY</div>
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-base-content mb-6 leading-tight">
-                Why I built <span className="text-primary">ProofPopify</span>
+              <div className="inline-block text-black font-bold uppercase tracking-widest text-xs mb-4">
+                FOUNDER'S STORY
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-black mb-6 leading-[1.1]">
+                Why I built ProofPopify
               </h2>
               
-              <div className="space-y-4 text-base-content/80 text-lg leading-relaxed mb-8">
+              <div className="space-y-4 text-black/70 font-medium text-lg leading-relaxed mb-8">
                 <p>
-                  "I was tired of seeing amazing startups struggle to convert visitors into customers. Building a great product isn't enough anymore—you have to build <strong>trust</strong>."
+                  "I was tired of seeing amazing startups struggle to convert visitors into customers. Building a great product isn't enough anymore—you have to build <strong className="font-bold text-black">trust</strong>."
                 </p>
                 <p>
                   "I built ProofPopify to help other startups grow. By showing genuine, 100% verified social proof directly from Stripe, we can instantly increase your credibility. More trust leads to more sales, which means more runway for your dream."
                 </p>
               </div>
 
-              <div className="flex items-center gap-4 mt-auto pt-6 border-t border-base-200">
+              <div className="flex flex-wrap items-center gap-4 mt-auto pt-6 border-t border-gray-300">
                 <div>
-                  <p className="font-bold text-base-content text-lg">Darayuth Hang</p>
-                  <p className="text-base-content/60 text-sm">Founder, ProofPopify</p>
+                  <p className="font-bold text-black text-lg">Darayuth Hang</p>
+                  <p className="text-black/60 font-medium text-sm">Founder, ProofPopify</p>
                 </div>
                 
                 <Link 
                   href="https://x.com/DarayuthH" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="btn btn-outline hover:bg-black hover:text-white ml-auto gap-2"
+                  className="inline-flex items-center justify-center bg-black text-white font-medium px-5 py-2.5 rounded border-2 border-black hover:bg-gray-800 ml-auto gap-2 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
                 >
                   <FaXTwitter className="w-4 h-4" />
                   Connect

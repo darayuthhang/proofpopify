@@ -45,7 +45,7 @@ export default function RecentTransactionsCard({ startup }) {
   };
 
   return (
-    <div className="card bg-base-100 shadow-xl border border-base-200">
+    <div className="card bg-base-100 shadow-xl border border-base-200" data-theme="cupcake">
       <div className="card-body">
         <div className="flex justify-between items-start mb-2">
           <div>

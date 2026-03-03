@@ -58,73 +58,69 @@ export default function Pricing() {
   };
 
   return (
-    <section className="py-24 bg-base-100">
+    <section className="py-24 bg-white border-b-2 border-black">
       <div className="container mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <div className="badge badge-accent mb-4 font-bold">PRICING</div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-base-content mb-4">Invest in Trust</h2>
-          <p className="text-base sm:text-lg text-base-content/60">Turn one customer into your next ten. Start increasing your conversions today.</p>
+        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+          <div className="inline-block text-black font-bold uppercase tracking-widest text-sm mb-4">
+            Pricing
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-black mb-6 leading-[1.05]">Invest in Trust</h2>
+          <p className="text-lg sm:text-xl text-black/70 font-medium max-w-xl mx-auto">
+            Turn one customer into your next ten. Start increasing your conversions today.
+          </p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto">
           {PRICING_TIERS.map((tier, idx) => (
             <div 
               key={idx} 
-              className={`card bg-base-100 shadow-xl border-2 transition-all hover:scale-[1.02] ${
-                tier.popular 
-                ? "border-primary shadow-primary/10 ring ring-primary/5" 
-                : "border-base-300"
-              }`}
+              className={`relative bg-[#F9FAFB] border-2 border-black rounded p-8 sm:p-12 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col`}
             >
-              <div className="card-body p-6 sm:p-10">
-                {tier.popular && (
-                  <div className="badge badge-primary absolute top-0 right-10 -translate-y-1/2 font-bold p-3">
-                    MOST POPULAR
-                  </div>
-                )}
-                
-                <div className="mb-6">
-                  <h3 className="card-title text-2xl font-bold text-base-content/70">{tier.name}</h3>
-                  <div className="mt-4 flex items-baseline gap-1">
-                    <span className="text-5xl font-black text-base-content tracking-tight">{tier.price}</span>
-                    <span className="text-xl text-base-content/40 font-semibold">{tier.interval}</span>
-                  </div>
-                  <p className="mt-4 text-base-content/60 leading-relaxed font-medium">{tier.description}</p>
+              {tier.popular && (
+                <div className="absolute top-0 right-8 -translate-y-1/2 bg-[#FFD91A] border border-black text-black font-bold uppercase text-xs px-4 py-1.5 rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] z-10">
+                  MOST POPULAR
                 </div>
-                
-                <div className="divider opacity-50"></div>
-                
-                <ul className="space-y-4 mb-10">
-                  {tier.features.map((feature, fIdx) => (
-                    <li key={fIdx} className="flex items-center gap-3 text-base-content/80 font-medium">
-                      <svg className="w-5 h-5 text-success shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-                
-                <div className="card-actions mt-auto">
-                  <button 
-                    onClick={() => handleSubscribe(tier.priceId)}
-                    disabled={loading}
-                    className={`btn btn-lg btn-block shadow-md ${
-                      tier.popular 
-                      ? "btn-primary" 
-                      : "btn-outline"
-                    }`}
-                  >
-                    {loading ? 'Processing...' : tier.cta}
-                  </button>
+              )}
+              
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-black mb-4">{tier.name}</h3>
+                <div className="flex items-baseline gap-1">
+                  <span className="text-5xl font-extrabold text-black tracking-tight">{tier.price}</span>
+                  <span className="text-lg text-black/60 font-bold">{tier.interval}</span>
                 </div>
+                <p className="mt-4 text-black/70 text-base font-medium leading-relaxed">{tier.description}</p>
               </div>
+              
+              <div className="h-px w-full bg-black mb-8 opacity-20"></div>
+              
+              <ul className="space-y-4 mb-10 flex-grow">
+                {tier.features.map((feature, fIdx) => (
+                  <li key={fIdx} className="flex items-start gap-4 text-black/80 font-medium">
+                    <span className="flex shrink-0 items-center justify-center w-5 h-5 bg-[#72DDA4] rounded-full border border-black mt-0.5">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              
+              <button 
+                onClick={() => handleSubscribe(tier.priceId)}
+                disabled={loading}
+                className={`w-full py-3.5 text-lg font-bold rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all ${
+                  tier.popular 
+                  ? "bg-[#72DDA4] text-black hover:bg-[#5bc58c]" 
+                  : "bg-white text-black hover:bg-gray-100"
+                }`}
+              >
+                {loading ? 'Processing...' : tier.cta}
+              </button>
             </div>
           ))}
         </div>
         
         <div className="mt-16 text-center">
-          <p className="text-base-content/50 font-medium">
+          <p className="text-black/60 font-medium text-sm">
             Risk-free trial. No credit card required to start.
           </p>
         </div>

@@ -23,13 +23,16 @@ export default function FAQ() {
   ];
 
   return (
-    <section className="py-24 bg-base-100">
+    <section className="py-24 bg-white border-b-2 border-black">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-base-content mb-4">
+          <div className="inline-block text-black font-bold uppercase tracking-widest text-sm mb-4">
+            FAQ
+          </div>
+          <h2 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-black mb-4 leading-[1.1]">
             Frequently Asked Questions
           </h2>
-          <p className="text-base sm:text-lg text-base-content/70">
+          <p className="text-lg sm:text-xl text-black/70 font-medium">
             Everything you need to know about ProofPopify.
           </p>
         </div>
@@ -38,13 +41,13 @@ export default function FAQ() {
           {faqs.map((faq, idx) => (
             <div 
               key={idx} 
-              className="collapse collapse-plus border border-base-300 bg-base-100 shadow-sm rounded-2xl"
+              className="collapse collapse-plus border-2 border-black bg-white rounded shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]"
             >
               <input type="radio" name="faq-accordion" defaultChecked={idx === 0} /> 
-              <div className="collapse-title text-lg font-bold text-base-content p-6">
+              <div className="collapse-title text-lg font-bold text-black p-6">
                 {faq.question}
               </div>
-              <div className="collapse-content px-6 text-base-content/70 leading-relaxed"> 
+              <div className="collapse-content px-6 text-black/70 font-medium text-base leading-relaxed"> 
                 <p className="pb-4">{faq.answer}</p>
               </div>
             </div>

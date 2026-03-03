@@ -24,8 +24,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" data-theme="cupcake">
-      <body className={inter.className}>
+    <html lang="en">
+      <body className={`${inter.className} bg-[#F9FAFB] text-black`}>
         <AuthProvider>
           <Navbar />
           <main className="min-h-[calc(100vh-64px)]">{children}</main>

@@ -41,6 +41,7 @@ export async function GET(request) {
         actionText: true,
         showRealNames: true,
         showIcon: true,
+        showBorder: true,
         position: true
       },
     });
@@ -104,6 +105,7 @@ export async function GET(request) {
       actionText: startup.actionText,
       showRealNames: startup.showRealNames,
       showIcon: startup.showIcon,
+      showBorder: startup.showBorder,
       position: startup.position,
       startupName: startup.name,
       avatarUrlBase: AVATAR_API_URL

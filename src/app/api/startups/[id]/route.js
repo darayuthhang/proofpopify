@@ -65,6 +65,11 @@ export async function PUT(request, { params }) {
     if (reqData.showIcon !== undefined) {
       updates.showIcon = reqData.showIcon === true || reqData.showIcon === "true";
     }
+
+    // Process Show Border
+    if (reqData.showBorder !== undefined) {
+      updates.showBorder = reqData.showBorder === true || reqData.showBorder === "true";
+    }
     
     // Process Name
     if (reqData.name && typeof reqData.name === "string") {
