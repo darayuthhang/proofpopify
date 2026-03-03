@@ -19,6 +19,7 @@
       this.bodyFontSize = '12px';
       
       this.elements = {};
+      this.positionPixel = '10px';
       
       this.init();
     }
@@ -119,7 +120,7 @@
           #proofpopify-container > div {
             width: max-content !important;
             max-width: 280px !important;
-            padding: 10px 12px !important;
+            padding: 8px 10px !important;
             box-sizing: border-box;
           }
           #proofpopify-container p {
@@ -162,7 +163,7 @@
         backgroundColor: this.backgroundColor,
         boxShadow: '0 20px 30px -8px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.08)',
         borderRadius: '14px',
-        padding: '14px 16px',
+        padding: '10px 14px',
         display: 'flex',
         alignItems: 'center',
         gap: '12px',
@@ -334,19 +335,18 @@
       } else {
         container.classList.add('mobile-bottom');
       }
-      const positionPixel = '24px'
       if (this.position === 'top-left') {
-        container.style.top = positionPixel;
-        container.style.left = positionPixel;
+        container.style.top = this.positionPixel;
+        container.style.left = this.positionPixel;
       } else if (this.position === 'top-right') {
-        container.style.top = positionPixel;
-        container.style.right = positionPixel;
+        container.style.top = this.positionPixel;
+        container.style.right = this.positionPixel;
       } else if (this.position === 'bottom-right') {
-        container.style.bottom = positionPixel;
-        container.style.right = positionPixel;
+        container.style.bottom = this.positionPixel;
+        container.style.right = this.positionPixel;
       } else {
-        container.style.bottom = positionPixel;
-        container.style.left = positionPixel;
+        container.style.bottom = this.positionPixel;
+        container.style.left = this.positionPixel;
       }
     }
 
