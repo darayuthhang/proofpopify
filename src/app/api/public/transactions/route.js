@@ -30,7 +30,7 @@ export async function GET(request) {
       );
     }
 
-    const startup = await prisma.startup.findFirst({
+    const startup = await prisma.Startup.findFirst({
       where: { proof_id: proofId },
       select: { 
         name: true,
