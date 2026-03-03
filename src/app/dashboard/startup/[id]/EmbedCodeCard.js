@@ -64,7 +64,7 @@ export default function EmbedCodeCard({
         className="flex items-center gap-[12px] transition-all"
         style={{
           width: "max-content",
-          maxWidth: "390px",
+          maxWidth: "360px",
           backgroundColor: bg,
           border: `1px solid ${borderColor}`,
           padding: isSmall ? "12px" : "16px",

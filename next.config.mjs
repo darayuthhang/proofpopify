@@ -10,10 +10,10 @@ const nextConfig = {
             key: "Access-Control-Allow-Origin",
             value: "*",
           },
-          {
-            key: "Cache-Control",
-            value: "public, max-age=300, s-maxage=300",
-          },
+          // {
+          //   key: "Cache-Control",
+          //   value: "public, max-age=300, s-maxage=300",
+          // },
           {
             key: "X-Content-Type-Options",
             value: "nosniff",

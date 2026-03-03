@@ -118,7 +118,7 @@
           }
           #proofpopify-container > div {
             width: max-content !important;
-            max-width: calc(100vw - 24px) !important;
+            max-width: 280px !important;
             padding: 10px 12px !important;
             box-sizing: border-box;
           }
