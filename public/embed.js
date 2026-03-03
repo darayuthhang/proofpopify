@@ -20,6 +20,7 @@
       
       this.elements = {};
       this.positionPixel = '10px';
+
       
       this.init();
     }
@@ -52,6 +53,16 @@
     }
 
     injectCSS() {
+      /**
+       * This code is for change padding of the card  #proofpopify-container > div {
+       *   width: max-content !important;
+       *   max-width: 280px !important;
+       *   padding: 8px 10px !important;
+       *   box-sizing: border-box;
+       * }
+       */
+      
+
       if (document.getElementById('proofpopify-styles')) return;
       const style = document.createElement('style');
       style.id = 'proofpopify-styles';
@@ -120,7 +131,7 @@
           #proofpopify-container > div {
             width: max-content !important;
             max-width: 280px !important;
-            padding: 10px 10px !important;
+            padding: 8px 10px !important;
             box-sizing: border-box;
           }
           #proofpopify-container p {

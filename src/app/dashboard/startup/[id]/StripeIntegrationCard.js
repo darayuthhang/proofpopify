@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaStripe } from "react-icons/fa6";
-import { HiArrowTopRightOnSquare, HiArrowPath, HiTableCells, HiInformationCircle } from "react-icons/hi2";
+import { HiArrowTopRightOnSquare, HiInformationCircle } from "react-icons/hi2";
 
 export default function StripeIntegrationCard({ startup }) {
   const router = useRouter();
@@ -12,44 +12,7 @@ export default function StripeIntegrationCard({ startup }) {
   const [isSavingStripeKey, setIsSavingStripeKey] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "", section: "" });
 
-  const [transactions, setTransactions] = useState([]);
-  const [isLoadingTx, setIsLoadingTx] = useState(false);
-  const [txError, setTxError] = useState(null);
 
-  const fetchTransactions = async () => {
-    setIsLoadingTx(true);
-    setTxError(null);
-    try {
-      const res = await fetch(`/api/public/transactions?proof_id=${startup.proof_id}`);
-      const data = await res.json();
-      if (res.ok && data.transactions) {
-        setTransactions(data.transactions);
-      } else {
-        setTxError(data.error || "Could not load transactions.");
-      }
-    } catch {
-      setTxError("Failed to fetch transactions.");
-    } finally {
-      setIsLoadingTx(false);
-    }
-  };
-
-  useEffect(() => {
-    if (startup.isKeySet) {
-      fetchTransactions();
-    }
-  }, [startup.isKeySet]);
-
-  const getTimeAgo = (timestamp) => {
-    const seconds = Math.floor(Date.now() / 1000) - timestamp;
-    if (seconds < 60) return "Just now";
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.floor(minutes / 60);
-    if (hours < 24) return `${hours}h ago`;
-    const days = Math.floor(hours / 24);
-    return `${days}d ago`;
-  };
 
   const handleSaveStripeKey = async (e) => {
     e.preventDefault();
@@ -71,7 +34,6 @@ export default function StripeIntegrationCard({ startup }) {
         setMessage({ type: "success", text: "Stripe key saved successfully!", section: "stripe" });
         setStripeKeyInput("");
         router.refresh();
-        fetchTransactions();
       }
     } catch (error) {
       setMessage({ type: "error", text: "Network error occurred", section: "stripe" });
@@ -150,77 +112,6 @@ export default function StripeIntegrationCard({ startup }) {
               </p>
             )}
           </form>
-        </div>
-      </div>
-
-      {/* 4. Recent Transactions */}
-      <div className="card bg-base-100 shadow-xl border border-base-200">
-        <div className="card-body">
-          <div className="flex justify-between items-start mb-2">
-            <div>
-              <h2 className="card-title text-xl flex items-center gap-2">
-                <HiTableCells className="w-5 h-5 text-info" />
-                Recent Transactions
-              </h2>
-              <p className="text-xs text-base-content/60 mt-1">
-                We pull this data live directly from Stripe. <strong>We do not save your customer's data to our databases.</strong>
-              </p>
-            </div>
-            {startup.isKeySet && (
-              <button 
-                onClick={fetchTransactions} 
-                className="btn btn-ghost btn-sm gap-1 mt-1" 
-                disabled={isLoadingTx}
-              >
-                <HiArrowPath className={`w-4 h-4 ${isLoadingTx ? "animate-spin" : ""}`} />
-                Refresh
-              </button>
-            )}
-          </div>
-
-          {!startup.isKeySet ? (
-            <div className="text-center py-10 text-base-content/50">
-              <FaStripe className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>Connect your Stripe key above to see transactions here.</p>
-            </div>
-          ) : isLoadingTx ? (
-            <div className="flex justify-center py-10">
-              <span className="loading loading-spinner loading-md"></span>
-            </div>
-          ) : txError ? (
-            <div className="text-center py-10">
-              <p className="text-error text-sm">{txError}</p>
-            </div>
-          ) : transactions.length === 0 ? (
-            <div className="text-center py-10 text-base-content/50">
-              <p>No transactions found for this Stripe account yet.</p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="table table-zebra w-full">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>City</th>
-                    <th>Country</th>
-                    <th>Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((tx) => (
-                    <tr key={tx.id}>
-                      <td className="font-medium">{tx.name || "Someone"}</td>
-                      <td className="font-medium">{tx.city}</td>
-                      <td>
-                        <span className="badge badge-ghost badge-sm">{tx.country}</span>
-                      </td>
-                      <td className="text-sm text-base-content/70">{getTimeAgo(tx.created)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
         </div>
       </div>
     </div>

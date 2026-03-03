@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import StripeIntegrationCard from "./StripeIntegrationCard";
 import DesignSettingsCard from "./DesignSettingsCard";
 import EmbedCodeCard from "./EmbedCodeCard";
+import RecentTransactionsCard from "./RecentTransactionsCard";
 
 export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   const router = useRouter();
@@ -92,15 +93,12 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Stripe */}
-        <div className="space-y-8">
+    <div className="space-y-8 pb-20">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column - Scrollable (Stripe & Design Settings) */}
+        <div className="lg:col-span-7 space-y-8 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-2 lg:pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <StripeIntegrationCard startup={startup} />
-        </div>
-
-        {/* Middle Column - Design */}
-        <div className="space-y-8">
+          
           <DesignSettingsCard 
             themeColor={themeColor} setThemeColor={setThemeColor}
             backgroundColor={backgroundColor} setBackgroundColor={setBackgroundColor}
@@ -114,8 +112,8 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           />
         </div>
 
-        {/* Right Column - Embed */}
-        <div className="space-y-8">
+        {/* Right Column - Sticky Sidebar (Live Preview & Embed Code) */}
+        <div className="lg:col-span-5 sticky top-24 space-y-8">
           <EmbedCodeCard 
             startupId={startup.proof_id}
             apiBaseUrl={apiBaseUrl}
@@ -129,6 +127,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             isTestModeEnabled={isTestModeEnabled}
             setIsTestModeEnabled={setIsTestModeEnabled}
           />
+          <RecentTransactionsCard startup={startup} />
         </div>
       </div>
     </div>

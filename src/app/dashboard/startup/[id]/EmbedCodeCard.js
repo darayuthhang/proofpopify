@@ -67,7 +67,7 @@ export default function EmbedCodeCard({
           maxWidth: "360px",
           backgroundColor: bg,
           border: `1px solid ${borderColor}`,
-          padding: isSmall ? "10px 10px" : "10px 14px",
+          padding: isSmall ? "8px 10px" : "10px 14px",
           borderRadius: "12px",
           boxShadow: isSmall ? "none" : "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
         }}

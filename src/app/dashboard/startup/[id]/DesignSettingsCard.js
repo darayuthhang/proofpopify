@@ -159,17 +159,20 @@ export default function DesignSettingsCard({
             </select>
           </div>
         </div>
+      </div>
 
+      {/* Floating Save Footer */}
+      <div className="p-6 pt-4 border-t border-base-200 bg-base-100 mt-auto rounded-b-[1rem] z-10 shrink-0">
         <button
           onClick={handleSaveDesign}
-          className="btn btn-primary w-full mt-6"
+          className="btn btn-primary w-full shadow-md transition-all"
           disabled={isSavingDesign}
         >
           {isSavingDesign ? <span className="loading loading-spinner text-white"></span> : "Save Design Preferences"}
         </button>
 
         {message.section === "design" && message.text && (
-          <p className={`text-sm mt-2 ${message.type === "error" ? "text-error" : "text-success"}`}>
+          <p className={`text-sm mt-3 text-center font-medium ${message.type === "error" ? "text-error" : "text-success"}`}>
             {message.text}
           </p>
         )}
