@@ -3,6 +3,29 @@ import { FaStripe } from "react-icons/fa6";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 
+export async function generateMetadata({ searchParams }) {
+  const params = await searchParams;
+  const proofId = params?.proof_id;
+  
+  if (proofId) {
+    const startup = await prisma.startup.findFirst({
+      where: { proof_id: proofId },
+      select: { name: true }
+    });
+    if (startup) {
+      return {
+        title: `Verified Transaction | ${startup.name}`,
+        description: `This transaction has been cryptographically verified by ProofPopify for ${startup.name}.`,
+      }
+    }
+  }
+
+  return {
+    title: "Verified Transaction | ProofPopify",
+    description: "This transaction has been cryptographically verified by ProofPopify using a secure direct Stripe integration.",
+  }
+}
+
 export default async function VerifiedPage({ searchParams }) {
   const params = await searchParams;
   const proofId = params.proof_id;

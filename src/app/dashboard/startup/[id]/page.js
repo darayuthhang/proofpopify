@@ -4,6 +4,19 @@ import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import StartupSettingsClient from "./StartupSettingsClient";
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const startup = await prisma.startup.findUnique({
+    where: { id: id },
+    select: { name: true }
+  });
+
+  return {
+    title: startup ? `${startup.name} Settings` : "Startup Settings",
+    description: "Configure your Stripe popup widget settings for this startup.",
+  };
+}
+
 export default async function StartupPage({ params }) {
   const session = await getServerSession(authOptions);
 

@@ -6,9 +6,20 @@ import Navbar from "./components/Navbar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "AppConversionLog — Precision Conversion Tracking",
+  title: {
+    template: '%s | ProofPopify',
+    default: 'ProofPopify — Boost Conversions with Stripe Social Proof Notifications',
+  },
   description:
-    "Track impressions, product page views, and conversion rates for all your applications in one place.",
+    'Increase trust and sales with real-time verified Stripe purchase popups on your website.',
+  openGraph: {
+    title: 'ProofPopify',
+    description: 'Increase trust and sales with real-time verified Stripe purchase popups on your website.',
+    url: 'https://proofpopify.com',
+    siteName: 'ProofPopify',
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }) {
