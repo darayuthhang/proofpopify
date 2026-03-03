@@ -120,7 +120,7 @@
           #proofpopify-container > div {
             width: max-content !important;
             max-width: 280px !important;
-            padding: 8px 10px !important;
+            padding: 10px 10px !important;
             box-sizing: border-box;
           }
           #proofpopify-container p {
