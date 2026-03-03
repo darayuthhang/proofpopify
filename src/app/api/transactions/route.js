@@ -30,7 +30,7 @@ export async function GET() {
 
     // Try fetching recent charges (successful payments)
     const charges = await stripe.charges.list({
-      limit: 10,
+      limit: 5,
     });
 
     const recentTransactions = charges.data.map((charge) => ({
