@@ -93,10 +93,10 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   };
 
   return (
-    <div className="space-y-8 pb-20">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+    <div className="h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-full items-stretch pb-10">
         {/* Left Column - Scrollable (Stripe & Design Settings) */}
-        <div className="lg:col-span-7 space-y-8 lg:h-[calc(100vh-6rem)] lg:overflow-y-auto lg:pr-2 lg:pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="lg:col-span-7 h-full overflow-y-auto space-y-8 pr-2 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <StripeIntegrationCard startup={startup} />
           
           <DesignSettingsCard 
@@ -113,7 +113,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
         </div>
 
         {/* Right Column - Sticky Sidebar (Live Preview & Embed Code) */}
-        <div className="lg:col-span-5 sticky top-24 space-y-8">
+        <div className="lg:col-span-5 h-full overflow-y-auto space-y-8 lg:pl-2 pb-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           <EmbedCodeCard 
             startupId={startup.proof_id}
             apiBaseUrl={apiBaseUrl}
