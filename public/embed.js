@@ -429,39 +429,31 @@
     }
 
     async fetchData() {
+      // If we know we are in dashboard test mode, don't ping the API if it's going to fail without a Stripe key yet
+      if (this.isTest) {
+        this.transactions = [
+          { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
+        ];
+        this.parseTestOverrides();
+        this.startCycle();
+        return;
+      }
+
       try {
         const res = await fetch(`${this.apiBase}/api/public/transactions?proof_id=${this.startupId}`);
         
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}));
           console.error(`ProofPopify: API returned ${res.status} - ${errorData.error || 'Unknown error'}`);
-          
-          // Still allow test mode to show dummy data even if API fails
-          if (this.isTest) {
-            this.transactions = [
-              { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
-            ];
-
-            // Parse URL overrides even on error so test preview features still work
-            this.parseTestOverrides();
-
-            this.startCycle();
-          }
           return;
         }
 
         const data = await res.json();
-        
+
         if (data.transactions && data.transactions.length > 0) {
           this.transactions = data.transactions;
           this.startupName = data.startupName || this.startupName;
-        } else if (this.isTest) {
-          this.transactions = [
-            { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
-          ];
-        }
 
-        if (this.transactions.length > 0) {
           // Default data
           if (data.themeColor) this.themeColor = data.themeColor;
           if (data.backgroundColor) this.backgroundColor = data.backgroundColor;
@@ -470,9 +462,6 @@
           if (data.showIcon !== undefined) this.showIcon = data.showIcon;
           if (data.position) this.position = data.position;
           if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
-          
-          // Test overrides
-          this.parseTestOverrides();
 
           this.startCycle();
         } else {
@@ -480,15 +469,6 @@
         }
       } catch (err) {
         console.error("ProofPopify: Error fetching data", err);
-        
-        // Allow test mode fallback even on network errors
-        if (this.isTest) {
-          this.transactions = [
-            { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
-          ];
-          this.parseTestOverrides();
-          this.startCycle();
-        }
       }
     }
 
