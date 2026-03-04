@@ -94,14 +94,14 @@ export default function StripeIntegrationCard({ startup }) {
             <input
               type="password"
               placeholder={startup.isKeySet ? "rk_live_... (Key is set, enter to update)" : "rk_live_... (Paste your Restricted Key here)"}
-              className={`input input-bordered w-full ${!startup.isKeySet ? "ring-2 ring-[#FFD91A] border-[#FFD91A] bg-[#FFD91A]/10 text-black placeholder:text-black/50" : ""}`}
+              className="input input-bordered w-full"
               value={stripeKeyInput}
               onChange={(e) => setStripeKeyInput(e.target.value)}
               required={!startup.isKeySet}
             />
             <button
               type="submit"
-              className={`btn w-full ${!startup.isKeySet ? "bg-[#FFD91A] text-black hover:bg-[#e5c317] border-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] animate-pulse" : "btn-primary"}`}
+              className="btn btn-primary w-full"
               disabled={isSavingStripeKey || (!stripeKeyInput && startup.isKeySet)}
             >
               {isSavingStripeKey ? <span className="loading loading-spinner text-current"></span> : (startup.isKeySet ? "Update Key" : "Save Key & Connect")}
