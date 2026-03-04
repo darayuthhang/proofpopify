@@ -56,26 +56,27 @@ export default function StripeIntegrationCard({ startup }) {
               : "Enter a Stripe Restricted Key to fetch transactions."}
           </p>
 
-          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 my-4 text-sm flex gap-2 items-start text-base-content/80">
-            <HiInformationCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-            <div>
-              <p className="font-semibold mb-1 text-base-content">Your data is 100% safe.</p>
-              <p>
-                Stripe specifically designed <strong>Restricted Keys</strong> for safely connecting third-party tools like ProofPopify. 
-                They only grant limited read access and cannot charge customers, issue refunds, or modify any account data. 
-                For maximum security, please create a key with only <strong>Read</strong> access to <strong>Charges</strong>.{" "}
-                <a 
-                  href="https://docs.stripe.com/keys-best-practices#limit-access" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline inline-flex items-center gap-1"
-                >
-                  Read Stripe's official security docs
-                  <HiArrowTopRightOnSquare className="w-3 h-3" />
-                </a>
-              </p>
+          <details className="my-3 group">
+            <summary className="text-xs text-base-content/50 cursor-pointer hover:text-base-content/70 transition-colors flex items-center gap-1.5 select-none">
+              <HiInformationCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>🔒 Your key is safe — restricted read-only access.{" "}
+                <span className="underline underline-offset-2">Learn more</span>
+              </span>
+            </summary>
+            <div className="mt-2 text-xs text-base-content/60 pl-5 leading-relaxed">
+              Stripe <strong>Restricted Keys</strong> only grant limited read access — they can't charge customers, issue refunds, or modify account data.
+              Create a key with only <strong>Read</strong> access to <strong>Charges</strong>.{" "}
+              <a 
+                href="https://docs.stripe.com/keys-best-practices#limit-access" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline inline-flex items-center gap-1"
+              >
+                Stripe security docs
+                <HiArrowTopRightOnSquare className="w-3 h-3" />
+              </a>
             </div>
-          </div>
+          </details>
 
           <div className="mb-4 mt-2">
             <a

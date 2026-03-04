@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 import StripeIntegrationCard from "./StripeIntegrationCard";
 import DesignSettingsCard from "./DesignSettingsCard";
 import EmbedCodeCard from "./EmbedCodeCard";
@@ -25,6 +26,39 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   const [isSavingDesign, setIsSavingDesign] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "", section: "" });
 
+  const handleSaveDesign = async () => {
+    setIsSavingDesign(true);
+
+    try {
+      const response = await fetch(`/api/startups/${startup.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          themeColor,
+          backgroundColor,
+          actionText,
+          showRealNames,
+          showIcon,
+          showBorder,
+          position
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || result?.error) {
+        toast.error(result?.error || "Failed to publish. Try again.");
+      } else {
+        toast.success("Published successfully! 🎉");
+        router.refresh();
+      }
+    } catch (error) {
+      toast.error("Network error — check your connection.");
+    }
+    setIsSavingDesign(false);
+  };
+
+  // Test mode: inject the embed script on the dashboard itself
   useEffect(() => {
     const SCRIPT_ID = `proofpopify-test-script-${startup.id}`;
     
@@ -63,42 +97,9 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
     };
   }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, showBorder, position]);
 
-  const handleSaveDesign = async () => {
-    setIsSavingDesign(true);
-    setMessage({ type: "", text: "", section: "design" });
-
-    try {
-      const response = await fetch(`/api/startups/${startup.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          themeColor,
-          backgroundColor,
-          actionText,
-          showRealNames,
-          showIcon,
-          showBorder,
-          position
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || result?.error) {
-        setMessage({ type: "error", text: result?.error || "Failed to save design options.", section: "design" });
-      } else {
-        setMessage({ type: "success", text: "Theme saved successfully!", section: "design" });
-        router.refresh();
-      }
-    } catch (error) {
-       setMessage({ type: "error", text: "Network error occurred", section: "design" });
-    }
-    setIsSavingDesign(false);
-  };
-
   return (
     <div className="h-full">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-stretch pb-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12  h-full items-stretch ">
         
         {/* Left Column (Settings) */}
         <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 pr-2 pb-10 custom-scrollbar">
@@ -112,14 +113,11 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             showIcon={showIcon} setShowIcon={setShowIcon}
             showBorder={showBorder} setShowBorder={setShowBorder}
             position={position} setPosition={setPosition}
-            handleSaveDesign={handleSaveDesign}
-            isSavingDesign={isSavingDesign}
-            message={message}
           />
         </div>
 
         {/* Center Column (Wide Live Preview) */}
-        <div className="lg:col-span-6 h-full overflow-y-auto space-y-6 lg:px-2 pb-10 custom-scrollbar">
+        <div className="lg:col-span-6 h-full overflow-y-auto lg:px-2 custom-scrollbar">
           <LivePreviewCard 
             themeColor={themeColor}
             backgroundColor={backgroundColor}
@@ -129,11 +127,14 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             showBorder={showBorder}
             isTestModeEnabled={isTestModeEnabled}
             setIsTestModeEnabled={setIsTestModeEnabled}
+            handleSaveDesign={handleSaveDesign}
+            isSavingDesign={isSavingDesign}
+            publishMessage={message}
           />
         </div>
 
         {/* Right Column (Embed Code & Transactions) */}
-        <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 lg:pl-2 pb-10 custom-scrollbar">
+        <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 lg:pl-2  custom-scrollbar">
           <EmbedCodeCard 
             startupId={startup.proof_id}
             apiBaseUrl={apiBaseUrl}

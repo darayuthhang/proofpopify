@@ -16,13 +16,10 @@ export default function DesignSettingsCard({
   showBorder,
   setShowBorder,
   position,
-  setPosition,
-  handleSaveDesign,
-  isSavingDesign,
-  message
+  setPosition
 }) {
   // Recommended Swatches
-  const highlightSwatches = ['#00B4D8', '#16a34a', '#8b5cf6', '#f97316', '#e02424', '#2563eb'];
+  const highlightSwatches = ['#2563eb', '#0891b2', '#7c3aed', '#059669', '#d97706', '#dc2626', '#0f172a'];
   const bgSwatches = ['#ffffff', '#f8fafc', '#1e293b', '#0f172a', '#18181b', '#2e1065'];
 
   return (
@@ -33,7 +30,7 @@ export default function DesignSettingsCard({
           2. Choose a Style
         </h2>
         <p className="text-sm text-gray-400 mb-4">
-          Pick a pre-designed theme for your popup. Click to preview, then save.
+          Customize your popup style. Preview changes live, then publish.
         </p>
 
         <div className="flex flex-col gap-4 mt-2">
@@ -74,7 +71,7 @@ export default function DesignSettingsCard({
           {/* Background Color */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="label p-0"><span className="label-text font-medium text-[#e5e7eb]">Card Background Color</span></label>
+              <label className="label p-0"><span className="label-text text-sm text-[#e5e7eb]"> Background Color</span></label>
               <div className="flex gap-1.5">
                 {bgSwatches.map(color => (
                   <button
@@ -107,14 +104,19 @@ export default function DesignSettingsCard({
           {/* Action Text */}
           <div>
             <label className="label pt-0"><span className="label-text font-medium text-[#e5e7eb]">Action Text</span></label>
-            <input
-              type="text"
+            <select
+              className="select select-bordered w-full bg-[#1f2937] border-gray-600 text-white"
               value={actionText}
               onChange={(e) => setActionText(e.target.value)}
-              placeholder="e.g., subscribed, bought, ordered"
-              className="input input-bordered w-full bg-[#1f2937] border-gray-600 text-white placeholder-gray-500"
-              maxLength={30}
-            />
+            >
+              <option value="subscribed">subscribed</option>
+              <option value="purchased">purchased</option>
+              <option value="bought">bought</option>
+              <option value="ordered">ordered</option>
+              <option value="paid">paid</option>
+              <option value="donated">donated</option>
+              <option value="booked">booked</option>
+            </select>
             <label className="label pb-0"><span className="label-text-alt text-gray-400">What did the customer do?</span></label>
           </div>
 
@@ -175,23 +177,6 @@ export default function DesignSettingsCard({
             </select>
           </div>
         </div>
-      </div>
-
-      {/* Floating Save Footer */}
-      <div className="p-6 pt-4 border-t border-gray-700 bg-transparent mt-auto rounded-b-[1rem] z-10 shrink-0">
-        <button
-          onClick={handleSaveDesign}
-          className="btn w-full bg-[#72DDA4] hover:bg-[#5bc88d] text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all font-bold"
-          disabled={isSavingDesign}
-        >
-          {isSavingDesign ? <span className="loading loading-spinner text-black"></span> : "Save Design Preferences"}
-        </button>
-
-        {message.section === "design" && message.text && (
-          <p className={`text-sm mt-3 text-center font-medium ${message.type === "error" ? "text-error" : "text-success"}`}>
-            {message.text}
-          </p>
-        )}
       </div>
     </div>
   );
