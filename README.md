@@ -15,4 +15,5 @@ https://www.proofpopify.com
 https://www.proofpopify.com/api/auth/callback/google
 
 
+https://www.proofpopify.com/api/stripe/webhook
 ssss

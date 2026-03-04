@@ -62,7 +62,7 @@ export default function RegisterPage() {
         <div className="card bg-base-200 shadow-xl w-full max-w-md">
           <div className="card-body text-center">
             <div className="text-5xl mb-2">📧</div>
-            <h1 className="text-2xl font-bold">Check Your Email</h1>
+            <h1 className="text-2xl text-white font-bold">Check Your Email</h1>
             <p className="text-base-content/60 mb-4">
               We&apos;ve sent a verification link to{" "}
               <span className="text-primary font-semibold">{submittedEmail}</span>.
