@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { HiCodeBracket, HiClipboard } from "react-icons/hi2";
+import { HiCodeBracket, HiClipboard, HiCheck } from "react-icons/hi2";
 
 export default function EmbedCodeCard({
   startupId,
@@ -11,6 +11,7 @@ export default function EmbedCodeCard({
 }) {
   const [activeTab, setActiveTab] = useState("html");
   const [scriptUrl, setScriptUrl] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
     setScriptUrl(`${apiBaseUrl || window.location.origin}/embed.js?id=${startupId}`);
@@ -25,8 +26,12 @@ export default function EmbedCodeCard({
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(activeTab === "html" ? htmlScript : nextjsScript);
+    setIsCopied(true);
     setMessage({ type: "success", text: "Copied to clipboard!", section: "embed" });
-    setTimeout(() => setMessage({ type: "", text: "", section: "" }), 3000);
+    setTimeout(() => {
+      setIsCopied(false);
+      setMessage({ type: "", text: "", section: "" });
+    }, 3000);
   };
 
   return (
@@ -65,11 +70,11 @@ export default function EmbedCodeCard({
 
           <button
             onClick={copyToClipboard}
-            className="btn bg-gray-700 hover:bg-gray-600 border-none text-white h-auto px-4"
+            className={`btn border-none text-white h-auto px-4 ${isCopied ? "bg-green-600 hover:bg-green-700" : "bg-gray-700 hover:bg-gray-600"}`}
             title="Copy Script"
           >
-            Copy
-            <HiClipboard className="w-5 h-5" />
+            {isCopied ? "Copied" : "Copy"}
+            {isCopied ? <HiCheck className="w-5 h-5" /> : <HiClipboard className="w-5 h-5" />}
           </button>
         </div>
       </div>

@@ -102,7 +102,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
       <div className="grid grid-cols-1 lg:grid-cols-12  h-full items-stretch ">
         
         {/* Left Column (Settings) */}
-        <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 pr-2 pb-10 custom-scrollbar">
+        <div className="lg:col-span-3 h-full overflow-y-auto space-y-6 pr-2 pb-20 custom-scrollbar">
           <StripeIntegrationCard startup={startup} />
           
           <DesignSettingsCard 

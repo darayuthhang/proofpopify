@@ -112,6 +112,8 @@ export default function DesignSettingsCard({
               <option value="subscribed">subscribed</option>
               <option value="purchased">purchased</option>
               <option value="bought">bought</option>
+              <option value="upgraded">upgraded</option>
+
               <option value="ordered">ordered</option>
               <option value="paid">paid</option>
               <option value="donated">donated</option>

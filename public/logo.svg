@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- Drop Shadow -->
+  <rect x="12" y="24" width="76" height="54" rx="8" fill="black" />
+  
+  <!-- Card Base -->
+  <rect x="6" y="16" width="76" height="54" rx="8" fill="white" stroke="black" stroke-width="5" stroke-linejoin="round" />
+  
+  <!-- Fake Text Lines -->
+  <path d="M52 38 h 18" stroke="black" stroke-width="5" stroke-linecap="round" />
+  <path d="M52 48 h 14" stroke="black" stroke-width="5" stroke-linecap="round" />
+  <path d="M52 58 h 9" stroke="black" stroke-width="5" stroke-linecap="round" />
+  
+  <!-- Checkmark -->
+  <path d="M22 46 L 30 54 L 46 34" stroke="black" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M22 46 L 30 54 L 46 34" stroke="#00C853" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

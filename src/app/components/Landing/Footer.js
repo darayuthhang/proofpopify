@@ -6,8 +6,8 @@ export default function Footer() {
     <footer className="footer p-10 lg:p-20 bg-[#F9FAFB] text-black">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
           <aside>
-            <div className="flex items-center gap-2 mb-4 text-black">
-              <span className="text-3xl">🔐</span>
+            <div className="flex items-center gap-3 mb-4 text-black">
+              <img src="/logo.svg" alt="ProofPopify Logo" className="w-10 h-10 drop-shadow-md" />
               <span className="text-2xl font-extrabold tracking-tight">{constants.APP_NAME}</span>
             </div>
             <p className="max-w-xs text-black/70 leading-relaxed font-medium">

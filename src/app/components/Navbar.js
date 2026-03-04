@@ -71,8 +71,8 @@ export default function Navbar() {
 
       {/* ── Logo (Center mobile, Left desktop) ── */}
       <div className="navbar-center lg:navbar-start flex-1 lg:flex-none">
-        <Link href="/" className="btn btn-ghost text-xl px-2 hover:bg-transparent text-black">
-          <span className="text-2xl mr-1">🔐</span>
+        <Link href="/" className="btn btn-ghost text-xl px-2 hover:bg-transparent text-black flex items-center gap-2">
+          <img src="/logo.svg" alt="ProofPopify Logo" className="w-8 h-8 drop-shadow-sm" />
           <span className="font-extrabold tracking-tight text-black">{constants.APP_NAME}</span>
         </Link>
       </div>
