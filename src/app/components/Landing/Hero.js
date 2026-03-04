@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { constants } from "@/lib/constants";
-import { HiCheckBadge } from "react-icons/hi2";
+import { HiCheckBadge, HiOutlineArrowRight } from "react-icons/hi2";
 
 export default function Hero() {
   return (
@@ -11,26 +11,27 @@ export default function Hero() {
           {/* Left Text Side */}
           <div className="flex-1 text-left">
             <h1 className="text-5xl sm:text-6xl lg:text-[72px] font-extrabold tracking-tight text-black mb-6 leading-[1.05]">
-              Automate & Scale Your Social Proof
+              Build Instant Trust &amp; Convert More Customers
             </h1>
             
             <p className="text-lg sm:text-xl lg:text-2xl text-black/80 font-medium mb-10 max-w-xl leading-relaxed">
-              ProofPopify helps you auto-generate real-time, verified Stripe purchase popups to build absolute trust and boost your conversion rate.
+              ProofPopify leverages real, verified Stripe payments to show visitors that your product is loved &amp; bought—turning skeptics into paying customers.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
               <Link 
-                href={constants.HERO_BUTTON_LINK} 
-                className="inline-block bg-[#7EE19F] text-black font-bold text-lg px-8 py-3.5 border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+                href="/#pricing" 
+                className="group inline-flex items-center bg-[#7EE19F] text-black font-bold text-lg px-8 py-3.5 border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
                 {constants.HERO_BUTTON_TEXT}
+                <HiOutlineArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform stroke-2 text-black" />
               </Link>
               
               <div className="flex items-center gap-2 text-black/80 font-medium text-sm">
                 <span className="flex items-center justify-center w-5 h-5 bg-[#7EE19F] rounded-full border border-black">
                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                 </span>
-                Free Trial — No Credit Card Required
+                Takes 2 minutes to install
               </div>
             </div>
             

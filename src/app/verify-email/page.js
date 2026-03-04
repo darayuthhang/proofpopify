@@ -54,8 +54,8 @@ function VerifyEmailContent() {
     <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4">
       <div className="card bg-base-200 shadow-xl w-full max-w-md">
         <div className="card-body text-center">
-          <div className="text-5xl mb-2">{icons[status]}</div>
-          <h1 className="text-2xl font-bold">{titles[status]}</h1>
+          <div className="text-5xl text-white mb-2">{icons[status]}</div>
+          <h1 className="text-2xl text-white font-bold">{titles[status]}</h1>
           <p className="text-base-content/60 mb-4">
             {status === "verifying" ? "Please wait..." : message}
           </p>
@@ -73,7 +73,7 @@ function VerifyEmailContent() {
           )}
 
           {status === "error" && (
-            <Link href="/register" className="btn btn-outline w-full">
+            <Link href="/register" className="btn btn-primary  w-full">
               Try Registering Again
             </Link>
           )}

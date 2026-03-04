@@ -38,7 +38,24 @@ export async function POST(req) {
           session.subscription
         );
 
+/**
+ * Stripe sends current_period_end as a Unix timestamp in seconds.
+ * It is:
 
+The date when the current billing period ends.
+
+For example:
+
+Monthly plan → end of this month cycle
+
+Yearly plan → end of this year cycle
+
+If user cancels but doesn’t cancel immediately:
+
+Stripe keeps current_period_end
+
+Subscription remains active until that date
+ */
         await prisma.user.update({
           where: {
             stripeCustomerId: session.customer,
@@ -71,7 +88,24 @@ export async function POST(req) {
             const updateData = {
               stripePriceId: subscription.items.data[0].price.id,
             };
+/**
+ * Stripe sends current_period_end as a Unix timestamp in seconds.
+ * It is:
 
+The date when the current billing period ends.
+
+For example:
+
+Monthly plan → end of this month cycle
+
+Yearly plan → end of this year cycle
+
+If user cancels but doesn’t cancel immediately:
+
+Stripe keeps current_period_end
+
+Subscription remains active until that date
+ */
             // Only update period end if it exists
             if (subscription.current_period_end) {
               updateData.stripeCurrentPeriodEnd = new Date(

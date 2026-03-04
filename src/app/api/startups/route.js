@@ -40,6 +40,34 @@ export async function POST(request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Check user's subscription plan and current startup count
+    const [user, startupCount] = await Promise.all([
+      prisma.user.findUnique({
+        where: { id: session.user.id },
+        select: { stripePriceId: true, isAccess: true }
+      }),
+      prisma.startup.count({
+        where: { userId: session.user.id }
+      })
+    ]);
+
+    if (!user || !user.isAccess) {
+      return NextResponse.json(
+        { error: "You need an active subscription to create a website." },
+        { status: 403 }
+      );
+    }
+
+    const starterPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_MONTHLY;
+    
+    // If the user is on the Starter plan and already has 1 or more startups, prevent creation
+    if (user.stripePriceId === starterPriceId && startupCount >= 1) {
+      return NextResponse.json(
+        { error: "Starter plan is limited to 1 website. Please upgrade to Growth for unlimited sites." },
+        { status: 403 }
+      );
+    }
+
     const body = await request.json();
     const { name } = body;
 

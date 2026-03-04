@@ -13,6 +13,7 @@ export default function DashboardPage() {
   const [newStartupName, setNewStartupName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -46,16 +47,22 @@ export default function DashboardPage() {
 
   if (!session) return null;
 
-  const openModal = () => modalRef.current?.showModal();
+  const openModal = () => {
+    setErrorMsg("");
+    modalRef.current?.showModal();
+  };
+  
   const closeModal = () => {
     modalRef.current?.close();
     setNewStartupName("");
+    setErrorMsg("");
   };
 
   const handleCreateStartup = async (e) => {
     e.preventDefault();
     if (!newStartupName.trim()) return;
     setIsCreating(true);
+    setErrorMsg("");
 
     try {
       const res = await fetch("/api/startups", {
@@ -63,14 +70,19 @@ export default function DashboardPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newStartupName }),
       });
+      
+      const data = await res.json();
+      
       if (res.ok) {
-        const data = await res.json();
         closeModal();
         // Navigate directly to the new startup's settings page
         router.push(`/dashboard/startup/${data.startup.id}`);
+      } else {
+        setErrorMsg(data.error || "Failed to create startup.");
       }
     } catch (err) {
       console.error("Error creating startup:", err);
+      setErrorMsg("An unexpected error occurred.");
     } finally {
       setIsCreating(false);
     }
@@ -146,9 +158,16 @@ export default function DashboardPage() {
             <HiRocketLaunch className="w-6 h-6 text-[#72DDA4]" />
             Add Your Startup
           </h3>
-          <p className="text-sm text-black/60 font-medium mb-8">
+          <p className="text-sm text-black/60 font-medium mb-6">
             Enter the name of your startup. You&apos;ll be taken to its settings page to connect Stripe and customize your popup widget.
           </p>
+          
+          {errorMsg && (
+            <div className="bg-[#FFCCCB] border-2 border-black text-black p-3 rounded mb-6 font-bold text-sm shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
+              {errorMsg}
+            </div>
+          )}
+
           <form onSubmit={handleCreateStartup} className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
                 <label className="font-bold text-black text-sm uppercase tracking-wider">Startup Name</label>
@@ -174,7 +193,7 @@ export default function DashboardPage() {
           </form>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button className="cursor-default">close</button>
+          <button className="cursor-default" onClick={closeModal}>close</button>
         </form>
       </dialog>
     </div>

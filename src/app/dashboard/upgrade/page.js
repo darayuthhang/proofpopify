@@ -51,84 +51,86 @@ export default function UpgradePage() {
   if (!session) return null;
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6 min-h-screen bg-transparent">
       {/* Back to Dashboard */}
-      <div className="mb-6">
-        <Link href="/dashboard" className="btn btn-ghost btn-sm gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+      <div className="mb-10">
+        <Link 
+          href="/dashboard" 
+          className="inline-flex items-center gap-2 font-bold text-black hover:text-black/70 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 stroke-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
           Back to Dashboard
         </Link>
       </div>
 
       {/* Header */}
-      <div className="text-center max-w-2xl mx-auto mb-12">
-        <div className="badge badge-primary mb-4 font-bold">UPGRADE</div>
-        <h1 className="text-4xl font-extrabold text-base-content mb-3">
+      <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20 animate-fade-in">
+        <div className="inline-block text-black font-bold uppercase tracking-widest text-sm mb-4">
+          Upgrade
+        </div>
+        <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-black mb-6 leading-[1.05]">
           Choose Your Plan
         </h1>
-        <p className="text-lg text-base-content/60">
+        <p className="text-lg sm:text-xl text-black/70 font-medium max-w-xl mx-auto">
           Unlock the full power of your dashboard with a subscription.
         </p>
       </div>
 
       {/* Pricing Cards */}
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      <div className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto animate-fade-in" style={{ animationDelay: "0.1s" }}>
         {PRICING_TIERS.map((tier, idx) => (
-          <div
-            key={idx}
-            className={`card bg-base-100 shadow-xl border-2 transition-all hover:scale-[1.02] ${
-              tier.popular
-                ? "border-primary shadow-primary/10 ring ring-primary/5"
-                : "border-base-300"
-            }`}
+          <div 
+            key={idx} 
+            className="relative bg-[#F9FAFB] border-2 border-black rounded p-8 sm:p-12 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all"
           >
-            <div className="card-body p-8">
-              {tier.popular && (
-                <div className="badge badge-primary absolute top-0 right-8 -translate-y-1/2 font-bold p-3">
-                  BEST VALUE
-                </div>
-              )}
-
-              <div className="mb-5">
-                <h3 className="card-title text-xl font-bold text-base-content/70">{tier.name}</h3>
-                <div className="mt-3 flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-base-content tracking-tight">{tier.price}</span>
-                  <span className="text-lg text-base-content/40 font-semibold">{tier.interval}</span>
-                </div>
-                <p className="mt-3 text-base-content/60 leading-relaxed text-sm">{tier.description}</p>
+            {tier.popular && (
+              <div className="absolute top-0 right-8 -translate-y-1/2 bg-[#FFD91A] border border-black text-black font-bold uppercase text-xs px-4 py-1.5 rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] z-10">
+                MOST POPULAR
               </div>
-
-              <div className="divider opacity-50 my-2"></div>
-
-              <ul className="space-y-3 mb-8">
-                {tier.features.map((feature, fIdx) => (
-                  <li key={fIdx} className="flex items-center gap-3 text-base-content/80 text-sm font-medium">
-                    <svg className="w-4 h-4 text-success shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                    </svg>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="card-actions mt-auto">
-                <button
-                  onClick={() => handleSubscribe(tier.priceId)}
-                  disabled={loading !== null}
-                  className={`btn btn-block shadow-md ${
-                    tier.popular ? "btn-primary" : "btn-outline"
-                  }`}
-                >
-                  {loading === tier.priceId ? (
-                    <span className="loading loading-spinner loading-sm"></span>
-                  ) : (
-                    tier.cta
-                  )}
-                </button>
+            )}
+            
+            <div className="mb-8">
+              <h3 className="text-2xl font-bold text-black mb-4">{tier.name}</h3>
+              <div className="flex items-baseline gap-1">
+                <span className="text-5xl font-extrabold text-black tracking-tight">{tier.price}</span>
+                <span className="text-lg text-black/60 font-bold">{tier.interval}</span>
               </div>
+              <p className="mt-4 text-black/70 text-base font-medium leading-relaxed">{tier.description}</p>
             </div>
+            
+            <div className="h-px w-full bg-black mb-8 opacity-20"></div>
+            
+            <ul className="space-y-4 mb-10 flex-grow">
+              {tier.features.map((feature, fIdx) => (
+                <li key={fIdx} className="flex items-start gap-4 text-black/80 font-medium">
+                  <span className="flex shrink-0 items-center justify-center w-5 h-5 bg-[#72DDA4] rounded-full border border-black mt-0.5">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            
+            <button 
+              onClick={() => handleSubscribe(tier.priceId)}
+              disabled={loading !== null}
+              className={`w-full py-3.5 text-lg font-bold rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all ${
+                tier.popular 
+                ? "bg-[#72DDA4] text-black hover:bg-[#5bc58c]" 
+                : "bg-white text-black hover:bg-gray-100"
+              } ${loading !== null ? "opacity-70 cursor-not-allowed" : "hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"}`}
+            >
+              {loading === tier.priceId ? (
+                <div className="flex items-center justify-center gap-2">
+                  <span className="loading loading-spinner loading-sm text-black"></span>
+                  Loading...
+                </div>
+              ) : (
+                tier.cta
+              )}
+            </button>
           </div>
         ))}
       </div>
