@@ -349,8 +349,8 @@
       if (this.isTest || this.isDummy) {
         verifyText.innerHTML = `<span style="opacity: 0.6">Verified</span> <span style="color: #6b7280; font-weight: 600;">Testing</span>`;
       } else {
-        const primaryColor = this.getContrastYIQ(this.backgroundColor);
-        verifyText.innerHTML = `<span style="opacity: 0.6">Verified</span> <span style="color: ${primaryColor}; font-weight: 600;">Authentic</span>`;
+        const stripeColor = '#422ad5';
+        verifyText.innerHTML = `<span style="opacity: 0.6">Verified by</span> <span style="color: ${stripeColor}; font-weight: 600;">Stripe</span>`;
       }
 
       // Instead of theme background, avatar uses its own styling set in createDOM
