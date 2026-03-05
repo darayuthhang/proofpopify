@@ -71,10 +71,14 @@ export default async function VerifiedPage({ searchParams }) {
 
           <div className="h-px w-full bg-black opacity-20 mb-8 sm:mb-12"></div>
 
-          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 ">
+          <div className="mt-6 sm:mt-8 pt-6 sm:pt-8 border-t-2 border-black/10 flex flex-col sm:flex-row items-center justify-between gap-6">
             <Link href="/" className="inline-flex items-center gap-2 sm:gap-2.5 text-xl sm:text-2xl font-extrabold text-black hover:-translate-y-1 transition-transform group">
               <img src="/logo.svg" alt="ProofPopify Logo" className="w-6 h-6 sm:w-8 sm:h-8 drop-shadow-sm group-hover:scale-110 transition-transform" />
               Proof<span className="text-[#00B4D8]">Popify</span>
+            </Link>
+
+            <Link href="/" className="h-10 sm:h-12 px-6 sm:px-8 inline-flex items-center justify-center font-bold text-black border-2 border-black rounded bg-[#FFD91A] shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all whitespace-nowrap">
+              Get ProofPopify
             </Link>
           </div>
         </div>
@@ -141,13 +145,19 @@ export default async function VerifiedPage({ searchParams }) {
           </div>
         </div>
 
-        <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t-2 border-black/10">
-          <p className="text-xs sm:text-sm text-black/50 uppercase tracking-widest font-extrabold mb-4 sm:mb-5">
-            Secured & Protected by
-          </p>
-          <Link href="/" className="inline-flex items-center gap-2 sm:gap-2.5 text-xl sm:text-2xl font-extrabold text-black hover:-translate-y-1 transition-transform group">
-            <img src="/logo.svg" alt="ProofPopify Logo" className="w-6 h-6 sm:w-8 sm:h-8 drop-shadow-sm group-hover:scale-110 transition-transform" />
-            Proof<span className="text-[#00B4D8]">Popify</span>
+        <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t-2 border-black/10 flex flex-col sm:flex-row items-center justify-between gap-8">
+          <div className="text-center sm:text-left">
+            <p className="text-xs sm:text-sm text-black/50 uppercase tracking-widest font-extrabold mb-3">
+              Secured & Protected by
+            </p>
+            <Link href="/" className="inline-flex items-center gap-2 sm:gap-2.5 text-xl sm:text-2xl font-extrabold text-black hover:-translate-y-1 transition-transform group">
+              <img src="/logo.svg" alt="ProofPopify Logo" className="w-6 h-6 sm:w-8 sm:h-8 drop-shadow-sm group-hover:scale-110 transition-transform" />
+              Proof<span className="text-[#00B4D8]">Popify</span>
+            </Link>
+          </div>
+
+          <Link href="/" className="h-12 sm:h-14 px-6 sm:px-8 inline-flex items-center justify-center font-bold text-black border-2 border-black rounded bg-[#FFD91A] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[2px] hover:translate-x-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all whitespace-nowrap text-lg">
+            Get ProofPopify
           </Link>
         </div>
         
