@@ -15,7 +15,7 @@ export async function generateMetadata({ searchParams }) {
     if (startup) {
       return {
         title: `Verified Transaction | ${startup.name}`,
-        description: `This transaction has been cryptographically verified by ProofPopify for ${startup.name}.`,
+        description: `This transaction has been Stripe verified by ProofPopify for ${startup.name}.`,
       }
     }
   }
@@ -66,7 +66,7 @@ export default async function VerifiedPage({ searchParams }) {
           </h1>
           
           <p className="text-lg sm:text-xl text-black/70 mb-8 sm:mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
-            We cannot verify the authenticity of this notification. The cryptographic proof is either missing or invalid, meaning this social proof might be fake.
+            We cannot verify the authenticity of this notification. The verification data is either missing or invalid, meaning this social proof might be fake.
           </p>
 
           <div className="h-px w-full bg-black opacity-20 mb-8 sm:mb-12"></div>
@@ -95,7 +95,7 @@ export default async function VerifiedPage({ searchParams }) {
         <div className="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] md:w-[40%] md:h-[40%] rounded-full bg-[#72DDA4] blur-3xl mix-blend-multiply"></div>
       </div>
 
-      <div className="max-w-3xl w-full bg-white rounded border-2 border-black p-6 sm:p-12 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-10 animate-fade-in">
+      <div className="max-w-4xl w-full bg-white rounded border-2 border-black p-6 sm:p-12 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative z-10 animate-fade-in">
         
         {/* Animated Icon Header */}
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-8 sm:mb-10 flex items-center justify-center rounded-full bg-[#72DDA4] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black">
@@ -105,45 +105,64 @@ export default async function VerifiedPage({ searchParams }) {
           </div>
         </div>
 
-        <div className="inline-block text-black font-extrabold uppercase tracking-widest text-xs sm:text-sm mb-6 bg-[#FFD91A] px-3 sm:px-4 py-2 rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -rotate-1">
-          Cryptographically Verified
+        <div className="inline-flex items-center text-black font-extrabold uppercase tracking-widest text-xs sm:text-sm mb-6 bg-[#FFD91A] px-3 sm:px-4 py-2 rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -rotate-1">
+          <FaStripe className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" /> Stripe Verified
         </div>
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black mb-4 sm:mb-6 tracking-tight leading-[1.1]">
-          Verified Transaction for <span className="text-[#00B4D8] block sm:inline mt-1 sm:mt-0">{startupName}</span>
+          <span className="text-[#00B4D8]">{startupName}</span> is verified
         </h1>
         
-        <p className="text-base sm:text-lg md:text-xl text-black/70 mb-8 sm:mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
-          The notification you just saw is real. We partner directly with Stripe to guarantee that every sale displayed is a genuine, completed transaction. No fake social proof.
+        <p className="text-xl sm:text-2xl text-black mb-8 sm:mb-10 font-bold max-w-2xl mx-auto leading-relaxed">
+          You just saw a genuine, completed transaction!
         </p>
 
-        <div className="h-px w-full bg-black opacity-20 mb-8 sm:mb-12"></div>
+        <div className="h-px w-full bg-black opacity-20 mb-8 sm:mb-10"></div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-left mb-2 sm:mb-4">
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start p-6 sm:p-8 bg-[#F9FAFB] border-2 border-black rounded shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
-            <div className="text-black bg-[#FFD91A] p-3 sm:p-3.5 rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] h-fit shrink-0">
-              <HiShieldCheck className="w-6 h-6 sm:w-7 sm:h-7" />
+        <div className="mb-10 p-6 sm:p-8 bg-[#F9FAFB] border-2 border-black rounded shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <h2 className="text-xl sm:text-2xl font-extrabold text-black mb-3 flex flex-col sm:flex-row items-center justify-center gap-2">
+                <HiCheckBadge className="w-8 h-8 text-[#72DDA4] shrink-0" /> This website only shows verified data
+            </h2>
+            <p className="text-black/70 font-medium text-sm sm:text-base max-w-xl mx-auto">
+                Data is collected directly from the payment provider via secure API, making it impossible to fake.
+            </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-6 text-center mb-10 sm:mb-12">
+          <div className="flex flex-col items-center p-6 bg-white border-2 border-black rounded shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all">
+            <div className="text-black bg-[#FFD91A] p-2 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-4">
+              <span className="font-extrabold text-lg lg:text-xl w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center">1</span>
             </div>
-            <div>
-              <h3 className="font-extrabold text-black mb-2 sm:mb-3 text-lg sm:text-xl tracking-tight">Direct Integration</h3>
-              <p className="text-sm sm:text-base text-black/70 font-medium leading-relaxed">
-                ProofPopify connects securely to the merchant's Stripe account via a read-only API. Manual entries and fake notifications are impossible.
-              </p>
-            </div>
+            <h3 className="font-extrabold text-black mb-2 text-lg lg:text-xl tracking-tight">Step 1</h3>
+            <p className="text-sm text-black/70 font-medium leading-relaxed">
+              Users connect their payment provider to our platform.
+            </p>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 items-start p-6 sm:p-8 bg-[#F9FAFB] border-2 border-black rounded shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] transition-all">
-            <div className="text-black bg-[#72DDA4] p-3 sm:p-3.5 rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] h-fit shrink-0">
-              <HiLockClosed className="w-6 h-6 sm:w-7 sm:h-7" />
+          <div className="flex flex-col items-center p-6 bg-white border-2 border-black rounded shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all">
+            <div className="text-black bg-[#72DDA4] p-2 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-4">
+              <span className="font-extrabold text-lg lg:text-xl w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center">2</span>
             </div>
-            <div>
-              <h3 className="font-extrabold text-black mb-2 sm:mb-3 text-lg sm:text-xl tracking-tight">Fraud Prevention</h3>
-              <p className="text-sm sm:text-base text-black/70 font-medium leading-relaxed">
-                We strictly monitor the encrypted data flow from Stripe to ensure absolute zero manipulation by the merchant or third parties.
-              </p>
+            <h3 className="font-extrabold text-black mb-2 text-lg lg:text-xl tracking-tight">Step 2</h3>
+            <p className="text-sm text-black/70 font-medium leading-relaxed">
+              We pull data directly from payment providers in real-time.
+            </p>
+          </div>
+
+          <div className="flex flex-col items-center p-6 bg-white border-2 border-black rounded shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 hover:shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] transition-all">
+            <div className="text-black bg-[#00B4D8] p-2 rounded-full border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] mb-4">
+              <span className="font-extrabold text-white text-lg lg:text-xl w-6 h-6 lg:w-8 lg:h-8 flex items-center justify-center">3</span>
             </div>
+            <h3 className="font-extrabold text-black mb-2 text-lg lg:text-xl tracking-tight">Step 3</h3>
+            <p className="text-sm text-black/70 font-medium leading-relaxed">
+              We display the data securely on the website.
+            </p>
           </div>
         </div>
+
+        <p className="text-base sm:text-lg text-black/80 font-medium mb-4 max-w-2xl mx-auto leading-relaxed">
+          In an age where many websites use fake data, <span className="font-extrabold text-black">{startupName}</span> decided to focus on trust.
+        </p>
 
         <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t-2 border-black/10 flex flex-col sm:flex-row items-center justify-between gap-8">
           <div className="text-center sm:text-left">

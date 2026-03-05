@@ -20,8 +20,8 @@ export default function Features() {
             <div className="space-y-6">
               {[
                 { 
-                    title: "100% Cryptographically Verified", 
-                    desc: "Every purchase is backed by a secure HMAC hash linked instantly to a real Stripe Charge ID.", 
+                    title: "100% Stripe Verified", 
+                    desc: "Every purchase is securely verified and linked instantly to a real Stripe transaction.", 
                     icon: <HiShieldCheck className="w-6 h-6 text-black" strokeWidth={2} />
                 },
                 { 

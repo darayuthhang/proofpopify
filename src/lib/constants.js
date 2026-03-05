@@ -31,7 +31,7 @@ export const PRICING_TIERS = [
     features: [
       "Unlimited Websites",
       "Priority Stripe Syncing",
-      "Cryptographic Verification Page",
+      "Stripe Verification Page",
       "Remove Watermark",
     
     ],
