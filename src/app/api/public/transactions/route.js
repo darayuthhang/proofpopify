@@ -46,11 +46,37 @@ export async function GET(request) {
       },
     });
 
-    if (!startup || !startup.stripeRestrictedKey) {
+    if (!startup) {
       return NextResponse.json(
-        { error: "Startup not found or has no API key configured" },
+        { error: "Startup not found" },
         { status: 404, headers: corsHeaders }
       );
+    }
+    
+    // Provide a default transaction to show if they haven't added a stripe key yet
+    const dummyTransaction = { 
+      name: "John Doe", 
+      city: "San Francisco", 
+      country: "United States", 
+      created: Math.floor(Date.now() / 1000) - 120 
+    };
+
+    if (!startup.stripeRestrictedKey) {
+      return NextResponse.json({
+        transactions: [dummyTransaction],
+        themeColor: startup.themeColor,
+        backgroundColor: startup.backgroundColor,
+        actionText: startup.actionText,
+        showRealNames: startup.showRealNames,
+        showIcon: startup.showIcon,
+        showBorder: startup.showBorder,
+        position: startup.position,
+        startupName: startup.name,
+        avatarUrlBase: AVATAR_API_URL
+      }, {
+        status: 200, 
+        headers: corsHeaders 
+      });
     }
 
     if (!startup.isActive) {
@@ -71,7 +97,7 @@ export async function GET(request) {
       limit: 5, // Fetch up to 5 latest successful transactions
     });
 
-    const recentTransactions = charges.data.map((charge) => {
+    let recentTransactions = charges.data.map((charge) => {
       // Extract first name safely, or force anonymous if privacy mode is on
       let firstName = "Someone";
       if (startup.showRealNames) {
@@ -97,6 +123,10 @@ export async function GET(request) {
         created: charge.created,
       };
     });
+
+    if (recentTransactions.length === 0) {
+      recentTransactions = [dummyTransaction];
+    }
 
     return NextResponse.json({ 
       transactions: recentTransactions,
