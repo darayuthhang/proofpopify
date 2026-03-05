@@ -16,6 +16,11 @@ export default function Navbar() {
   const isAdmin = session?.user?.role === "ADMIN";
   const isSubscribed = !!session?.user?.isAccess;
 
+  // Do not show the navbar on the verified page
+  if (pathname?.startsWith("/verified")) {
+    return null;
+  }
+
   // ── Handlers ──────────────────────────────────────────────
   const handleBillingPortal = async () => {
     try {
