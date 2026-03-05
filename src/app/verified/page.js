@@ -1,5 +1,4 @@
-import { HiCheckBadge, HiShieldCheck, HiLockClosed, HiXCircle } from "react-icons/hi2";
-import { FaStripe } from "react-icons/fa6";
+import { HiCheckBadge, HiXCircle } from "react-icons/hi2";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 
@@ -14,15 +13,15 @@ export async function generateMetadata({ searchParams }) {
     });
     if (startup) {
       return {
-        title: `Verified Transaction | ${startup.name}`,
-        description: `This transaction has been Stripe verified by ProofPopify for ${startup.name}.`,
+        title: `Verified Action | ${startup.name}`,
+        description: `This action has been cryptographically verified by ProofPopify for ${startup.name}.`,
       }
     }
   }
 
   return {
-    title: "Unverified Transaction | ProofPopify",
-    description: "This transaction could not be verified by ProofPopify.",
+    title: "Unverified Action | ProofPopify",
+    description: "This action could not be verified by ProofPopify.",
   }
 }
 
@@ -62,11 +61,11 @@ export default async function VerifiedPage({ searchParams }) {
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black mb-4 sm:mb-6 tracking-tight leading-[1.1]">
-            Unverified Transaction
+            Unverified Action
           </h1>
           
           <p className="text-lg sm:text-xl text-black/70 mb-8 sm:mb-12 font-medium max-w-2xl mx-auto leading-relaxed">
-            We cannot verify the authenticity of this notification. The verification data is either missing or invalid, meaning this social proof might be fake.
+            We cannot verify this notification. The verification data is either missing or invalid.
           </p>
 
           <div className="h-px w-full bg-black opacity-20 mb-8 sm:mb-12"></div>
@@ -100,13 +99,10 @@ export default async function VerifiedPage({ searchParams }) {
         {/* Animated Icon Header */}
         <div className="relative w-24 h-24 sm:w-28 sm:h-28 mx-auto mb-8 sm:mb-10 flex items-center justify-center rounded-full bg-[#72DDA4] border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] text-black">
           <HiCheckBadge className="w-12 h-12 sm:w-14 sm:h-14" />
-          <div className="absolute -bottom-2 -right-2 bg-white rounded-full p-2 sm:p-2.5 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] min-w-fit min-h-fit flex items-center justify-center">
-            <FaStripe className="w-6 h-6 sm:w-7 sm:h-7 text-[#635BFF]" />
-          </div>
         </div>
 
         <div className="inline-flex items-center text-black font-extrabold uppercase tracking-widest text-xs sm:text-sm mb-6 bg-[#FFD91A] px-3 sm:px-4 py-2 rounded border-2 border-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transform -rotate-1">
-          <FaStripe className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" /> Stripe Verified
+          Cryptographically Verified
         </div>
 
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-black mb-4 sm:mb-6 tracking-tight leading-[1.1]">
@@ -114,7 +110,7 @@ export default async function VerifiedPage({ searchParams }) {
         </h1>
         
         <p className="text-xl sm:text-2xl text-black mb-8 sm:mb-10 font-bold max-w-2xl mx-auto leading-relaxed">
-          You just saw a genuine, completed transaction!
+          You just saw a genuine, completed action!
         </p>
 
         <div className="h-px w-full bg-black opacity-20 mb-8 sm:mb-10"></div>
@@ -124,7 +120,7 @@ export default async function VerifiedPage({ searchParams }) {
                 <HiCheckBadge className="w-8 h-8 text-[#72DDA4] shrink-0" /> This website only shows verified data
             </h2>
             <p className="text-black/70 font-medium text-sm sm:text-base max-w-xl mx-auto">
-                Data is collected directly from the payment provider via secure API, making it impossible to fake.
+                Data is securely processed via API, ensuring reliable and transparent information.
             </p>
         </div>
 
@@ -135,7 +131,7 @@ export default async function VerifiedPage({ searchParams }) {
             </div>
             <h3 className="font-extrabold text-black mb-2 text-lg lg:text-xl tracking-tight">Step 1</h3>
             <p className="text-sm text-black/70 font-medium leading-relaxed">
-              Users connect their payment provider to our platform.
+              Users connect their verified accounts to our platform.
             </p>
           </div>
           
@@ -145,7 +141,7 @@ export default async function VerifiedPage({ searchParams }) {
             </div>
             <h3 className="font-extrabold text-black mb-2 text-lg lg:text-xl tracking-tight">Step 2</h3>
             <p className="text-sm text-black/70 font-medium leading-relaxed">
-              We pull data directly from payment providers in real-time.
+              We pull real-time interaction data securely.
             </p>
           </div>
 
@@ -161,7 +157,7 @@ export default async function VerifiedPage({ searchParams }) {
         </div>
 
         <p className="text-base sm:text-lg text-black/80 font-medium mb-4 max-w-2xl mx-auto leading-relaxed">
-          In an age where many websites use fake data, <span className="font-extrabold text-black">{startupName}</span> decided to focus on trust.
+          In an age where authentic social proof matters, <span className="font-extrabold text-black">{startupName}</span> focuses on building trust.
         </p>
 
         <div className="mt-12 sm:mt-16 pt-8 sm:pt-10 border-t-2 border-black/10 flex flex-col sm:flex-row items-center justify-between gap-8">
