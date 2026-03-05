@@ -26,6 +26,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+ 
+<script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+
       <body className={`${inter.className} bg-[#F9FAFB] text-black`}>
         <AuthProvider>
           <Toaster
