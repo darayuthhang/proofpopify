@@ -29,7 +29,10 @@ export default function RootLayout({ children }) {
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta charSet="utf-8" />
+        <meta name="msvalidate.01" content="F5BEB9A059E9161592797B7267427B5C" />
+        <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
       </head>
+
       
       <body className={`${inter.className} bg-[#F9FAFB] text-black`}>
         <AuthProvider>
