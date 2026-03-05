@@ -64,6 +64,7 @@ export async function GET(request) {
     if (!startup.stripeRestrictedKey) {
       return NextResponse.json({
         transactions: [dummyTransaction],
+        isDummy: true,
         themeColor: startup.themeColor,
         backgroundColor: startup.backgroundColor,
         actionText: startup.actionText,
@@ -124,12 +125,15 @@ export async function GET(request) {
       };
     });
 
+    let isDummy = false;
     if (recentTransactions.length === 0) {
       recentTransactions = [dummyTransaction];
+      isDummy = true;
     }
 
     return NextResponse.json({ 
       transactions: recentTransactions,
+      isDummy: isDummy,
       themeColor: startup.themeColor,
       backgroundColor: startup.backgroundColor,
       actionText: startup.actionText,

@@ -346,8 +346,12 @@
       verifyIcon.style.color = this.themeColor;
       
       // Update Stripe text color
-      const stripeColor = '#422ad5';
-      verifyText.innerHTML = `<span style="opacity: 0.6">Verified by</span> <span style="color: ${stripeColor}; font-weight: 600;">Stripe</span>`;
+      if (this.isTest || this.isDummy) {
+        verifyText.innerHTML = `<span style="opacity: 0.6">Verified</span> <span style="color: #6b7280; font-weight: 600;">Testing</span>`;
+      } else {
+        const stripeColor = '#422ad5';
+        verifyText.innerHTML = `<span style="opacity: 0.6">Verified by</span> <span style="color: ${stripeColor}; font-weight: 600;">Stripe</span>`;
+      }
 
       // Instead of theme background, avatar uses its own styling set in createDOM
 
@@ -427,7 +431,11 @@
       // Update Verify Link with proof_id
       const { verifyLink } = this.elements;
       if (verifyLink) {
+        if (this.isTest || this.isDummy) {
+          verifyLink.href = `${this.apiBase}/verified?test=true`;
+        } else {
           verifyLink.href = `${this.apiBase}/verified?proof_id=${this.startupId}`;
+        }
       }
 
       // Slide In (direction based on position)
@@ -492,6 +500,7 @@
           if (data.showBorder !== undefined) this.showBorder = data.showBorder;
           if (data.position) this.position = data.position;
           if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
+          if (data.isDummy !== undefined) this.isDummy = data.isDummy;
 
           this.startCycle();
         } else {
