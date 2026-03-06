@@ -11,11 +11,11 @@ export default function Hero() {
           {/* Left Text Side */}
           <div className="flex-1 text-left">
             <h1 className="text-5xl sm:text-6xl lg:text-[72px] font-extrabold tracking-tight text-black mb-6 leading-[1.05]">
-              Build Instant Trust &amp; Convert More Customers
+              Stripe-Verified Sales Popups That Boost Conversions
             </h1>
             
             <p className="text-lg sm:text-xl lg:text-2xl text-black/80 font-medium mb-10 max-w-xl leading-relaxed">
-              ProofPopify leverages real, verified Stripe payments to show visitors that your product is loved &amp; bought—turning skeptics into paying customers.
+              Add a beautiful, real-time social proof widget to your site in 2 minutes. We sync directly with Stripe so visitors know your sales are 100% real.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
