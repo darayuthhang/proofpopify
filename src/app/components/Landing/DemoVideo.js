@@ -80,12 +80,7 @@ export default function DemoVideo() {
 
           {/* Trust Nudge Below Video */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-sm text-black/60 font-medium">
-            <div className="flex items-center gap-2">
-              <span className="flex items-center justify-center w-5 h-5 bg-[#7EE19F] rounded-full border border-black">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              </span>
-              No credit card needed
-            </div>
+           
             <div className="flex items-center gap-2">
               <span className="flex items-center justify-center w-5 h-5 bg-[#7EE19F] rounded-full border border-black">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="black" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
