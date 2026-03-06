@@ -1,4 +1,5 @@
 import Hero from "./Landing/Hero";
+import AsSeenIn from "./Landing/AsSeenIn";
 import WhyUseIt from "./Landing/WhyUseIt";
 import HowItWorks from "./Landing/HowItWorks";
 import Features from "./Landing/Features";
@@ -12,6 +13,9 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen">
       <Hero />
+      <div className="bg-[#F9FAFB] border-b-2 border-black/10">
+        <AsSeenIn />
+      </div>
       <WhyUseIt />
       <HowItWorks />
       <div id="features">
