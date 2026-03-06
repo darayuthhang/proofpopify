@@ -1,5 +1,6 @@
 import Hero from "./Landing/Hero";
 import AsSeenIn from "./Landing/AsSeenIn";
+import DemoVideo from "./Landing/DemoVideo";
 import WhyUseIt from "./Landing/WhyUseIt";
 import HowItWorks from "./Landing/HowItWorks";
 import Features from "./Landing/Features";
@@ -16,6 +17,7 @@ export default function LandingPage() {
       <div className="bg-[#F9FAFB] border-b-2 border-black/10">
         <AsSeenIn />
       </div>
+      <DemoVideo />
       <WhyUseIt />
       <HowItWorks />
       <div id="features">
