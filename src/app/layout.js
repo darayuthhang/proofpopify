@@ -3,6 +3,7 @@ import "./globals.css";
 import AuthProvider from "./components/AuthProvider";
 import Navbar from "./components/Navbar";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,20 @@ export default function RootLayout({ children }) {
       </head>
 
       
+         
+               <Script type="text/javascript">
+               {`
+               window.$crisp=[];
+               window.CRISP_WEBSITE_ID="c62e3df2-7e9b-4704-a11c-0e48a70e7453";
+               (function(){
+                 d=document; s=d.createElement("script");
+                 s.src="https://client.crisp.chat/l.js";
+                 s.async=1;
+                 d.getElementsByTagName("head")[0].appendChild(s);
+               })();
+             `}
+             </Script>
+          
       <body className={`${inter.className} bg-[#F9FAFB] text-black`}>
         <AuthProvider>
           <Toaster
