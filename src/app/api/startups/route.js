@@ -51,23 +51,35 @@ export async function POST(request) {
       })
     ]);
 
-    if (!user || !user.isAccess) {
-      return NextResponse.json(
-        { error: "You need an active subscription to create a website." },
-        { status: 403 }
-      );
-    }
+    // if (!user || !user.isAccess) {
+    //   return NextResponse.json(
+    //     { error: "You need an active subscription to create a website." },
+    //     { status: 403 }
+    //   );
+    // }
 
-    const starterPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_MONTHLY;
+    // const starterPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_MONTHLY;
     
-    // If the user is on the Starter plan and already has 1 or more startups, prevent creation
-    if (user.stripePriceId === starterPriceId && startupCount >= 1) {
-      return NextResponse.json(
-        { error: "Starter plan is limited to 1 website. Please upgrade to Growth for unlimited sites." },
-        { status: 403 }
-      );
-    }
+    // // If the user is on the Starter plan and already has 1 or more startups, prevent creation
+    // if (user.stripePriceId === starterPriceId && startupCount >= 1) {
+    //   return NextResponse.json(
+    //     { error: "Starter plan is limited to 1 website. Please upgrade to Growth for unlimited sites." },
+    //     { status: 403 }
+    //   );
+    // }
+    
+  const growthPriceId = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_YEARLY;
 
+// Check if user is NOT on growth plan
+const isGrowthUser = user.stripePriceId === growthPriceId;
+
+// Free users can only create 1
+    if (!isGrowthUser && startupCount >= 1) {
+    return NextResponse.json(
+      { error: "Free plan allows only 1 website. Upgrade to Growth for unlimited sites." },
+      { status: 403 }
+    );
+    }
     const body = await request.json();
     const { name } = body;
 

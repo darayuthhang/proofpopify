@@ -5,6 +5,7 @@ import { authOptions } from '@/lib/auth';
 import prisma from '@/lib/prisma'; // Assuming this is where prisma client is exported
 
 export async function POST(req) {
+  
   try {
     const session = await getServerSession(authOptions);
 

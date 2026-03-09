@@ -19,9 +19,13 @@ export default function Hero() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
-              <Link 
-                href="/#pricing" 
-                className="group inline-flex items-center bg-[#7EE19F] text-black font-bold text-lg px-8 py-3.5 border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
+              <Link
+                href="/register" 
+                // href="/#pricing" 
+                className="group inline-flex items-center bg-[#7EE19F] text-black 
+                font-bold text-lg px-8 py-3.5 border-2 border-black rounded 
+                shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] hover:translate-x-[1px] 
+                hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
                 {constants.HERO_BUTTON_TEXT}
                 <HiOutlineArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-1 transition-transform stroke-2 text-black" />
