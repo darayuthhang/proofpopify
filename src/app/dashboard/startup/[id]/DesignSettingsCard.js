@@ -15,6 +15,8 @@ export default function DesignSettingsCard({
   setShowIcon,
   showBorder,
   setShowBorder,
+  showCity,
+  setShowCity,
   position,
   setPosition
 }) {
@@ -161,6 +163,20 @@ export default function DesignSettingsCard({
               className="toggle toggle-success bg-gray-600 border-gray-500" 
               checked={showBorder}
               onChange={(e) => setShowBorder(e.target.checked)}
+            />
+          </div>
+
+          {/* Show City Toggle */}
+          <div className="flex items-center justify-between p-3 bg-[#1f2937] rounded-lg">
+            <div>
+              <span className="label-text font-medium block text-[#e5e7eb]">Show City</span>
+              <span className="text-xs text-gray-400">Display the customer's city alongside their country.</span>
+            </div>
+            <input 
+              type="checkbox" 
+              className="toggle toggle-success bg-gray-600 border-gray-500" 
+              checked={showCity}
+              onChange={(e) => setShowCity(e.target.checked)}
             />
           </div>
 

@@ -13,6 +13,7 @@
       this.showRealNames = true;
       this.showIcon = true;
       this.showBorder = true;
+      this.showCity = true;
       this.position = 'bottom-left';
       this.avatarUrlBase = "https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed="; // Fallback
 
@@ -410,7 +411,7 @@
       nameSpan.innerText = displayName;
       
       let locationText = "";
-      if (currentTx.city && currentTx.city !== "Unknown City") {
+      if (this.showCity && currentTx.city && currentTx.city !== "Unknown City") {
         locationText = `${currentTx.city} (${currentTx.country || 'Unknown'})`;
       } else if (currentTx.country) {
         locationText = `${currentTx.country}`;
@@ -498,6 +499,7 @@
           if (data.showRealNames !== undefined) this.showRealNames = data.showRealNames;
           if (data.showIcon !== undefined) this.showIcon = data.showIcon;
           if (data.showBorder !== undefined) this.showBorder = data.showBorder;
+          if (data.showCity !== undefined) this.showCity = data.showCity;
           if (data.position) this.position = data.position;
           if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
           if (data.isDummy !== undefined) this.isDummy = data.isDummy;
@@ -520,6 +522,7 @@
       const forcePosition = this.urlObj.searchParams.get('position');
       const forceShowIcon = this.urlObj.searchParams.get('showIcon');
       const forceShowBorder = this.urlObj.searchParams.get('showBorder');
+      const forceShowCity = this.urlObj.searchParams.get('showCity');
 
       if (forceTheme) this.themeColor = decodeURIComponent(forceTheme);
       if (forceBg) this.backgroundColor = decodeURIComponent(forceBg);
@@ -527,6 +530,7 @@
       if (forceRealNames !== null) this.showRealNames = forceRealNames === 'true';
       if (forceShowIcon !== null) this.showIcon = forceShowIcon === 'true';
       if (forceShowBorder !== null) this.showBorder = forceShowBorder === 'true';
+      if (forceShowCity !== null) this.showCity = forceShowCity === 'true';
       if (forcePosition) this.position = forcePosition;
     }
 

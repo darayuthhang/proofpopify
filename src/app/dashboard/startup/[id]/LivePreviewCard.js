@@ -9,6 +9,7 @@ export default function LivePreviewCard({
   showRealNames,
   showIcon,
   showBorder,
+  showCity,
   isTestModeEnabled,
   setIsTestModeEnabled,
   handleSaveDesign,
@@ -77,6 +78,7 @@ export default function LivePreviewCard({
             realName={showRealNames} 
             showIcon={showIcon}
             showBorder={showBorder}
+            showCity={showCity}
           />
         </div>
       </div>

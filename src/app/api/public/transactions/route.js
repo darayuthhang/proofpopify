@@ -42,6 +42,7 @@ export async function GET(request) {
         showRealNames: true,
         showIcon: true,
         showBorder: true,
+        showCity: true,
         position: true
       },
     });
@@ -56,7 +57,7 @@ export async function GET(request) {
     // Provide a default transaction to show if they haven't added a stripe key yet
     const dummyTransaction = { 
       name: "John Doe", 
-      city: "San Francisco", 
+      city: startup.showCity ? "San Francisco" : "Unknown City", 
       country: "United States", 
       created: Math.floor(Date.now() / 1000) - 120 
     };
@@ -71,6 +72,7 @@ export async function GET(request) {
         showRealNames: startup.showRealNames,
         showIcon: startup.showIcon,
         showBorder: startup.showBorder,
+        showCity: startup.showCity,
         position: startup.position,
         startupName: startup.name,
         avatarUrlBase: AVATAR_API_URL
@@ -119,7 +121,7 @@ export async function GET(request) {
       return {
         id: charge.id,
         name: firstName,
-        city: charge.billing_details?.address?.city || "Unknown City",
+        city: startup.showCity ? (charge.billing_details?.address?.city || "Unknown City") : "Unknown City",
         country: fullCountryName,
         created: charge.created,
       };
@@ -140,6 +142,7 @@ export async function GET(request) {
       showRealNames: startup.showRealNames,
       showIcon: startup.showIcon,
       showBorder: startup.showBorder,
+      showCity: startup.showCity,
       position: startup.position,
       startupName: startup.name,
       avatarUrlBase: AVATAR_API_URL

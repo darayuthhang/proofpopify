@@ -13,7 +13,8 @@ export default function PopupPreview({
   city = "New York",
   country = "United States",
   showIcon = false,
-  showBorder = true
+  showBorder = true,
+  showCity = true
 }) {
   const isSmall = size === "small";
   const displayName = realName ? customerName : "Someone";
@@ -76,7 +77,7 @@ export default function PopupPreview({
             <>
               {" in "}
               <span className="font-semibold" style={{ color: color, fontWeight: "600" }}>
-                {city && city !== "Unknown City" ? `${city} (${country})` : `${country}`}
+                {showCity && city && city !== "Unknown City" ? `${city} (${country})` : `${country}`}
               </span>
             </>
           ) : ""}

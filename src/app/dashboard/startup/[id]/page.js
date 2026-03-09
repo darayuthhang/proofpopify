@@ -50,6 +50,7 @@ export default async function StartupPage({ params }) {
     showRealNames: startup.showRealNames ?? true,
     showIcon: startup.showIcon ?? true,
     showBorder: startup.showBorder ?? true,
+    showCity: startup.showCity ?? true,
     position: startup.position || "bottom-left",
     isKeySet,
   };

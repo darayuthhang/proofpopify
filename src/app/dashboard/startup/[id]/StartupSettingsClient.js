@@ -21,6 +21,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
   const [showRealNames, setShowRealNames] = useState(startup.showRealNames);
   const [showIcon, setShowIcon] = useState(startup.showIcon ?? false);
   const [showBorder, setShowBorder] = useState(startup.showBorder ?? true);
+  const [showCity, setShowCity] = useState(startup.showCity ?? true);
   const [position, setPosition] = useState(startup.position || "bottom-left");
 
   const [isSavingDesign, setIsSavingDesign] = useState(false);
@@ -40,6 +41,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           showRealNames,
           showIcon,
           showBorder,
+          showCity,
           position
         }),
       });
@@ -75,6 +77,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
           realNames: showRealNames.toString(),
           showIcon: showIcon.toString(),
           showBorder: showBorder.toString(),
+          showCity: showCity.toString(),
           position: position
         });
         script.src = `${apiBaseUrl || window.location.origin}/embed.js?${queryParams.toString()}`;
@@ -95,7 +98,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
       const container = document.getElementById("proofpopify-container");
       if (container) container.remove();
     };
-  }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, showBorder, position]);
+  }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, showBorder, showCity, position]);
 
   return (
     <div className="h-full">
@@ -112,6 +115,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             showRealNames={showRealNames} setShowRealNames={setShowRealNames}
             showIcon={showIcon} setShowIcon={setShowIcon}
             showBorder={showBorder} setShowBorder={setShowBorder}
+            showCity={showCity} setShowCity={setShowCity}
             position={position} setPosition={setPosition}
           />
         </div>
@@ -125,6 +129,7 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
             showRealNames={showRealNames}
             showIcon={showIcon}
             showBorder={showBorder}
+            showCity={showCity}
             isTestModeEnabled={isTestModeEnabled}
             setIsTestModeEnabled={setIsTestModeEnabled}
             handleSaveDesign={handleSaveDesign}

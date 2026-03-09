@@ -71,6 +71,11 @@ export async function PUT(request, { params }) {
       updates.showBorder = reqData.showBorder === true || reqData.showBorder === "true";
     }
     
+    // Process Show City
+    if (reqData.showCity !== undefined) {
+      updates.showCity = reqData.showCity === true || reqData.showCity === "true";
+    }
+    
     // Process Name
     if (reqData.name && typeof reqData.name === "string") {
         updates.name = reqData.name;

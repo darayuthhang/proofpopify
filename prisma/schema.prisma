@@ -48,6 +48,7 @@ model Startup {
   showRealNames       Boolean  @default(true)
   showIcon            Boolean  @default(true)
   showBorder          Boolean  @default(true)
+  showCity            Boolean  @default(true)
   position            String   @default("bottom-left")
   isActive            Boolean  @default(true)
   createdAt           DateTime @default(now())
