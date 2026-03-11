@@ -88,14 +88,14 @@ export default function StartupSettingsClient({ startup, apiBaseUrl }) {
       const script = document.getElementById(SCRIPT_ID);
       if (script) script.remove();
       
-      const container = document.getElementById("proofpopify-container");
+      const container = document.getElementById("ppfy-c");
       if (container) container.remove();
     }
     
     return () => {
       const script = document.getElementById(SCRIPT_ID);
       if (script) script.remove();
-      const container = document.getElementById("proofpopify-container");
+      const container = document.getElementById("ppfy-c");
       if (container) container.remove();
     };
   }, [isTestModeEnabled, startup.id, apiBaseUrl, themeColor, backgroundColor, actionText, showRealNames, showIcon, showBorder, showCity, position]);

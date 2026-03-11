@@ -1,582 +1,201 @@
-(function() {
-  class ProofPopifyWidget {
-    constructor() {
-      this.transactions = [];
-      this.currentIndex = 0;
-      this.isVisible = false;
-      this.cycleInterval = null;
-      
-      // Default settings
-      this.themeColor = '#00B4D8';
-      this.backgroundColor = '#ffffff';
-      this.actionText = 'subscribed';
-      this.showRealNames = true;
-      this.showIcon = true;
-      this.showBorder = true;
-      this.showCity = true;
-      this.position = 'bottom-left';
-      this.avatarUrlBase = "https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed="; // Fallback
+(function(){
+var d=document,w=window;
+function E(t,s,p){var e=d.createElement(t);if(s)for(var k in s)e.style[k]=s[k];if(p)p.appendChild(e);return e}
+function hexYIQ(h){h=h.replace('#','');var r=parseInt(h.substr(0,2),16),g=parseInt(h.substr(2,2),16),b=parseInt(h.substr(4,2),16);return((r*299)+(g*587)+(b*114))/1000}
 
-      this.headingFontSize = '14px';
-      this.bodyFontSize = '12px';
-      
-      this.elements = {};
-      this.positionPixel = '10px';
+class ProofPopifyWidget{
+constructor(){
+this.tx=[];this.ci=0;this.vis=false;this.cyc=null;
+this.tc='#00B4D8';this.bg='#ffffff';this.at='subscribed';
+this.rn=true;this.si=true;this.sb=true;this.sc=true;
+this.pos='bottom-left';this.avBase="https://api.dicebear.com/9.x/micah/svg?backgroundColor=transparent&seed=";
+this.hfs='14px';this.bfs='12px';this.el={};this.pp='20px';
+this.init();
+}
 
-      
-      this.init();
-    }
+init(){
+var s=d.currentScript||d.querySelector('script[data-proofpopify]')||d.querySelector('script[src*="embed.js"]');
+if(!s){console.error("ProofPopify: Script tag not found.");return}
+this.url=new URL(s.getAttribute('src'),w.location.href);
+this.sid=this.url.searchParams.get('id');
+this.tst=this.url.searchParams.get('test')==='true';
+this.api=this.url.origin;
+if(!this.sid){console.error("ProofPopify: Missing 'id' parameter.");return}
+this.css();this.dom();this.fetch();
+}
 
-    init() {
-      // Try multiple strategies to find the script tag.
-      // document.currentScript only works during synchronous execution,
-      // so it fails when the script is loaded with async/defer.
-      const scriptTag = document.currentScript
-        || document.querySelector('script[data-proofpopify]')
-        || document.querySelector('script[src*="embed.js"]');
-      if (!scriptTag) {
-        console.error("ProofPopify: Embed script tag not found. Make sure the script tag has a 'data-proofpopify' attribute or its src contains 'embed.js'.");
-        return;
-      }
+css(){
+if(d.getElementById('ppfy-s'))return;
+var s=d.createElement('style');s.id='ppfy-s';
+s.textContent='@keyframes ppfy-sl{from{opacity:0;transform:translateX(-120%)}to{opacity:1;transform:translateX(0)}}@keyframes ppfy-sr{from{opacity:0;transform:translateX(120%)}to{opacity:1;transform:translateX(0)}}@keyframes ppfy-ol{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(-120%)}}@keyframes ppfy-or{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(120%)}}@keyframes ppfy-p{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}@keyframes ppfy-sh{0%{background-position:-200% 0}100%{background-position:200% 0}}#ppfy-c.ppfy-in-l{animation:ppfy-sl .5s ease-out forwards}#ppfy-c.ppfy-in-r{animation:ppfy-sr .5s ease-out forwards}#ppfy-c.ppfy-out-l{animation:ppfy-ol .5s ease-in forwards}#ppfy-c.ppfy-out-r{animation:ppfy-or .5s ease-in forwards}@media(max-width:640px){#ppfy-c{left:12px!important;right:auto!important}#ppfy-c.mob-b{bottom:12px!important;top:auto!important}#ppfy-c.mob-t{top:12px!important;bottom:auto!important}#ppfy-c>div{width:max-content!important;max-width:280px!important;padding:8px 10px!important;box-sizing:border-box}#ppfy-c p{font-size:12px!important}#ppfy-c span,#ppfy-c a{font-size:10px!important}#ppfy-c svg{width:12px!important;height:12px!important}#ppfy-aw{width:32px!important;height:32px!important;font-size:16px!important;border-radius:8px!important}}';
+d.head.appendChild(s);
+}
 
-      this.urlObj = new URL(scriptTag.getAttribute('src'), window.location.href);
-      this.startupId = this.urlObj.searchParams.get('id');
-      this.isTest = this.urlObj.searchParams.get('test') === 'true';
-      this.apiBase = this.urlObj.origin;
+dom(){
+var el=this.el;
+el.ctr=E('div',{position:'fixed',zIndex:'999999',opacity:'0',pointerEvents:'none',fontFamily:'-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif'});
+el.ctr.id='ppfy-c';
 
-      if (!this.startupId) {
-        console.error("ProofPopify: Missing 'id' parameter in embed script URL.");
-        return;
-      }
+el.card=E('div',{backgroundColor:this.bg,padding:'10px 14px',display:'flex',alignItems:'center',gap:'12px',width:'max-content',maxWidth:'370px',boxSizing:'border-box',position:'relative',overflow:'hidden'},el.ctr);
 
-      this.injectCSS();
-      this.createDOM();
-      this.fetchData();
-    }
+el.shim=E('div',{position:'absolute',top:'0',left:'0',right:'0',bottom:'0',background:'linear-gradient(90deg,transparent 0%,rgba(255,255,255,.08) 50%,transparent 100%)',backgroundSize:'200% 100%',animation:'ppfy-sh 2s ease-in-out .5s 1',pointerEvents:'none',borderRadius:'14px'},el.card);
 
-    injectCSS() {
-      /**
-       * This code is for change padding of the card  #proofpopify-container > div {
-       *   width: max-content !important;
-       *   max-width: 280px !important;
-       *   padding: 8px 10px !important;
-       *   box-sizing: border-box;
-       * }
-       */
-      
+el.avw=E('div',{width:'42px',height:'42px',borderRadius:'50%',display:'none',alignItems:'center',justifyContent:'center',flexShrink:'0',position:'relative',overflow:'hidden',backgroundColor:'#f3f4f6'},el.card);
+el.avw.id='ppfy-aw';
 
-      if (document.getElementById('proofpopify-styles')) return;
-      const style = document.createElement('style');
-      style.id = 'proofpopify-styles';
-      style.innerHTML = `
-        @keyframes proofpopify-slideUp {
-          from { opacity: 0; transform: translateY(20px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes proofpopify-slideDown {
-          from { opacity: 0; transform: translateY(-20px) scale(0.95); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes proofpopify-fadeOut {
-          from { opacity: 1; transform: translateY(0) scale(1); }
-          to { opacity: 0; transform: translateY(10px) scale(0.95); }
-        }
-        @keyframes proofpopify-pulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.15); }
-          100% { transform: scale(1); }
-        }
-        @keyframes proofpopify-ring {
-          0% { transform: rotate(0deg); }
-          15% { transform: rotate(12deg); }
-          30% { transform: rotate(-10deg); }
-          45% { transform: rotate(8deg); }
-          60% { transform: rotate(-6deg); }
-          75% { transform: rotate(3deg); }
-          100% { transform: rotate(0deg); }
-        }
-        @keyframes proofpopify-shimmer {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-        #proofpopify-container.ppfy-animate-in-bottom {
-          animation: proofpopify-slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        #proofpopify-container.ppfy-animate-in-top {
-          animation: proofpopify-slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-        #proofpopify-container.ppfy-animate-out {
-          animation: proofpopify-fadeOut 0.4s ease-in forwards;
-        }
-        #proofpopify-emoji {
-          animation: proofpopify-pulse 0.6s ease-in-out 0.3s 1;
-          display: inline-block;
-        }
-        #proofpopify-bell {
-          animation: proofpopify-ring 0.6s ease-in-out 0.1s 1;
-          display: inline-block;
-          transform-origin: top center;
-        }
-        @media (max-width: 640px) {
-          #proofpopify-container {
-            left: 12px !important;
-            right: auto !important;
-          }
-          #proofpopify-container.mobile-bottom {
-            bottom: 12px !important;
-            top: auto !important;
-          }
-          #proofpopify-container.mobile-top {
-            top: 12px !important;
-            bottom: auto !important;
-          }
-          #proofpopify-container > div {
-            width: max-content !important;
-            max-width: 280px !important;
-            padding: 8px 10px !important;
-            box-sizing: border-box;
-          }
-          #proofpopify-container p {
-            font-size: 12px !important;
-          }
-          #proofpopify-container span, #proofpopify-container a {
-            font-size: 10px !important;
-          }
-          #proofpopify-container svg {
-            width: 12px !important;
-            height: 12px !important;
-          }
-          #proofpopify-emoji-wrap {
-            width: 32px !important;
-            height: 32px !important;
-            font-size: 16px !important;
-            border-radius: 8px !important;
-          }
-        }
-      `;
-      document.head.appendChild(style);
-    }
+el.avi=E('img',{width:'100%',height:'100%',objectFit:'cover'},el.avw);
 
-    createDOM() {
-      // Container
-      const container = document.createElement('div');
-      container.id = 'proofpopify-container';
-      Object.assign(container.style, {
-        position: 'fixed',
-        zIndex: '999999',
-        opacity: '0',
-        pointerEvents: 'none',
-        fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif'
-      });
-      this.elements.container = container;
+var tc=E('div',{display:'flex',flexDirection:'column',gap:'3px',position:'relative'},el.card);
 
-      // Card
-      const card = document.createElement('div');
-      Object.assign(card.style, {
-        backgroundColor: this.backgroundColor,
-        padding: '10px 14px',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '12px',
-        width: 'max-content',
-        maxWidth: '370px',
-        boxSizing: 'border-box',
-        position: 'relative',
-        overflow: 'hidden'
-      });
-      this.elements.card = card;
+el.tr=E('p',{margin:'0',fontSize:this.hfs,fontWeight:'500',color:'#374151',lineHeight:'1.4'},tc);
 
-      // Shimmer overlay (subtle premium shine effect)
-      const shimmer = document.createElement('div');
-      shimmer.className = 'proofpopify-shimmer';
-      Object.assign(shimmer.style, {
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        right: '0',
-        bottom: '0',
-        background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.08) 50%, transparent 100%)',
-        backgroundSize: '200% 100%',
-        animation: 'proofpopify-shimmer 2s ease-in-out 0.5s 1',
-        pointerEvents: 'none',
-        borderRadius: '14px'
-      });
-      card.appendChild(shimmer);
+el.ns=d.createElement('span');el.ns.style.fontWeight='700';
+el.itn=d.createTextNode(' in ');
+el.ls=d.createElement('span');el.ls.style.fontWeight='600';
+el.atn=d.createTextNode(' '+this.at);
+el.tr.append(el.ns,el.itn,el.ls,el.atn);
 
-      // Avatar icon container (hidden by default, shown if showIcon is true)
-      const emojiContainer = document.createElement('div');
-      emojiContainer.id = 'proofpopify-avatar-wrap';
-      Object.assign(emojiContainer.style, {
-        width: '42px',
-        height: '42px',
-        borderRadius: '50%', // Circle for avatars
-        display: 'none',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: '0',
-        position: 'relative',
-        overflow: 'hidden',
-        backgroundColor: '#f3f4f6'
-      });
-      this.elements.emojiContainer = emojiContainer;
+var mr=E('div',{display:'flex',alignItems:'center',gap:'6px',marginTop:'2px'},tc);
 
-      const emojiSpan = document.createElement('img');
-      emojiSpan.id = 'proofpopify-avatar-img';
-      Object.assign(emojiSpan.style, {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover'
-      });
-      emojiContainer.appendChild(emojiSpan);
-      this.elements.emojiSpan = emojiSpan;
+el.ts=E('span',{fontSize:'12px',color:'#6b7280',display:'flex',alignItems:'center',gap:'3px'},mr);
+E('span',{width:'3px',height:'3px',borderRadius:'50%',backgroundColor:'#d1d5db',flexShrink:'0'},mr);
 
-      // Text Container
-      const textContainer = document.createElement('div');
-      textContainer.style.display = 'flex';
-      textContainer.style.flexDirection = 'column';
-      textContainer.style.gap = '3px';
-      textContainer.style.position = 'relative';
+el.vl=d.createElement('a');
+el.vl.href=this.api+'/verified';el.vl.target='_blank';el.vl.rel='noreferrer';
+Object.assign(el.vl.style,{display:'flex',alignItems:'center',gap:'3px',textDecoration:'none',cursor:'pointer',transition:'opacity .2s',opacity:'0.7'});
+el.vl.onmouseover=function(){this.style.opacity='1'};
+el.vl.onmouseout=function(){this.style.opacity='0.7'};
 
-      // Title Row
-      const titleRow = document.createElement('p');
-      Object.assign(titleRow.style, { margin: '0', fontSize: this.headingFontSize, fontWeight: '500', color: '#374151', lineHeight: '1.4' });
-      this.elements.titleRow = titleRow;
+el.vi=E('div',{display:'flex',alignItems:'center'},el.vl);
+el.vi.innerHTML='<svg style="width:14px;height:14px" fill="currentColor" viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 15l-4-4 1.41-1.41L11 13.17l6.59-6.59L19 8l-8 8z"/></svg>';
 
-      const nameSpan = document.createElement('span');
-      nameSpan.style.fontWeight = '700';
-      this.elements.nameSpan = nameSpan;
+el.vt=E('span',{fontSize:'11px',display:'flex',gap:'2px',alignItems:'center'},el.vl);
+mr.appendChild(el.vl);
+d.body.appendChild(el.ctr);
+}
 
-      const inTextNode = document.createTextNode(' in ');
-      this.elements.inTextNode = inTextNode;
+sty(){
+var el=this.el,c=el.card,ctr=el.ctr;
+c.style.backgroundColor=this.bg;
+if(this.sb){
+c.style.border='2px solid #000';c.style.borderRadius='6px';
+c.style.boxShadow='4px 4px 0 0 rgba(0,0,0,1)';
+el.avw.style.border='1px solid #000';el.avw.style.boxShadow='none';
+if(el.shim)el.shim.style.display='none';
+}else{
+c.style.border='1px solid '+(hexYIQ(this.bg)>=128?'#e5e7eb':'#374151');
+c.style.borderRadius='14px';
+c.style.boxShadow='0 20px 30px -8px rgba(0,0,0,.12),0 8px 16px -4px rgba(0,0,0,.08)';
+el.avw.style.border='2px solid #fff';el.avw.style.boxShadow='0 2px 5px rgba(0,0,0,.05)';
+if(el.shim)el.shim.style.display='block';
+}
+var txt=hexYIQ(this.bg)>=128?'#374151':'#f3f4f6';
+el.tr.style.color=txt;el.ts.style.color=txt;el.ts.style.opacity='0.8';
+el.vl.style.opacity='1';el.vt.style.color=txt;el.vi.style.color=this.tc;
+var sImg='<img src="'+this.api+'/stripe-logo.svg" alt="Stripe" style="height:13px;width:auto;vertical-align:middle;display:inline-block">';
+if(this.tst||this.dm){
+el.vt.innerHTML='<span>Verified by</span>'+sImg;
+}else{
+el.vt.innerHTML='<span>Verified by</span>'+sImg;
+}
+el.avw.style.display=this.si?'flex':'none';
+Object.assign(ctr.style,{top:'auto',bottom:'auto',left:'auto',right:'auto'});
+ctr.classList.remove('mob-t','mob-b');
+ctr.classList.add(this.pos.includes('top')?'mob-t':'mob-b');
+var p=this.pos,px=this.pp;
+if(p==='top-left'){ctr.style.top=px;ctr.style.left=px}
+else if(p==='top-right'){ctr.style.top=px;ctr.style.right=px}
+else if(p==='bottom-right'){ctr.style.bottom=px;ctr.style.right=px}
+else{ctr.style.bottom=px;ctr.style.left=px}
+}
 
-      const locationSpan = document.createElement('span');
-      locationSpan.style.fontWeight = '600';
-      this.elements.locationSpan = locationSpan;
+show(){
+if(!this.tx.length)return;
+var t=this.tx[this.ci],el=this.el,dn=this.rn?(t.name||'Someone'):'Someone';
+this.sty();
+el.avi.src=this.avBase+encodeURIComponent(dn);
+el.avi.style.animation='none';el.avi.offsetHeight;
+el.avi.style.animation='ppfy-p .6s ease-in-out .2s 1';
+el.atn.nodeValue=' '+this.at;
+el.ns.innerText=dn;
+var loc='';
+if(this.sc&&t.city&&t.city!=='Unknown City')loc=t.city+' ('+( t.country||'Unknown')+')';
+else if(t.country)loc=t.country;
+if(!loc){el.itn.nodeValue=' ';el.ls.style.display='none'}
+else{el.itn.nodeValue=' in ';el.ls.style.display='inline';el.ls.innerText=loc;el.ls.style.color=this.tc}
+el.ts.innerText=this.ago(t.created);
+if(this.tst||this.dm)el.vl.href=this.api+'/verified?test=true';
+else el.vl.href=this.api+'/verified?proof_id='+this.sid;
+var c=el.ctr,isR=this.pos.includes('right');
+c.classList.remove('ppfy-out-l','ppfy-out-r','ppfy-in-l','ppfy-in-r');
+c.style.opacity='1';c.style.pointerEvents='auto';
+c.classList.add(isR?'ppfy-in-r':'ppfy-in-l');
+this.vis=true;
+var self=this;
+setTimeout(function(){
+c.classList.remove('ppfy-in-l','ppfy-in-r');c.classList.add(isR?'ppfy-out-r':'ppfy-out-l');
+setTimeout(function(){
+c.style.opacity='0';c.style.pointerEvents='none';c.classList.remove('ppfy-out-l','ppfy-out-r');
+self.vis=false;self.ci=(self.ci+1)%self.tx.length;
+},500);
+},4000);
+}
 
-      const actionTextNode = document.createTextNode(` ${this.actionText}`);
-      this.elements.actionTextNode = actionTextNode;
+async fetch(){
+if(this.tst){
+this.tx=[{name:'John Doe',city:'San Francisco',country:'United States',created:Math.floor(Date.now()/1000)-120}];
+this.ov();this.cycle();return;
+}
+try{
+var r=await window.fetch(this.api+'/api/public/transactions?proof_id='+this.sid);
+if(!r.ok){var e=await r.json().catch(function(){return{}});console.error('ProofPopify: API '+r.status+' - '+(e.error||'Unknown'));return}
+var j=await r.json();
+if(j.transactions&&j.transactions.length>0){
+this.tx=j.transactions;
+if(j.themeColor)this.tc=j.themeColor;
+if(j.backgroundColor)this.bg=j.backgroundColor;
+if(j.actionText)this.at=j.actionText;
+if(j.showRealNames!==undefined)this.rn=j.showRealNames;
+if(j.showIcon!==undefined)this.si=j.showIcon;
+if(j.showBorder!==undefined)this.sb=j.showBorder;
+if(j.showCity!==undefined)this.sc=j.showCity;
+if(j.position)this.pos=j.position;
+if(j.avatarUrlBase)this.avBase=j.avatarUrlBase;
+if(j.isDummy!==undefined)this.dm=j.isDummy;
+this.cycle();
+}else{console.warn('ProofPopify: No transactions found.')}
+}catch(e){console.error('ProofPopify: Fetch error',e)}
+}
 
-      titleRow.append(nameSpan, inTextNode, locationSpan, actionTextNode);
+ov(){
+if(!this.tst)return;
+var u=this.url.searchParams,g=function(k){return u.get(k)};
+if(g('theme'))this.tc=decodeURIComponent(g('theme'));
+if(g('bg'))this.bg=decodeURIComponent(g('bg'));
+if(g('action'))this.at=decodeURIComponent(g('action'));
+if(g('realNames')!==null)this.rn=g('realNames')==='true';
+if(g('showIcon')!==null)this.si=g('showIcon')==='true';
+if(g('showBorder')!==null)this.sb=g('showBorder')==='true';
+if(g('showCity')!==null)this.sc=g('showCity')==='true';
+if(g('position'))this.pos=g('position');
+}
 
-      // Meta Row
-      const metaRow = document.createElement('div');
-      Object.assign(metaRow.style, { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' });
+cycle(){
+this.show();
+var self=this;
+this.cyc=setInterval(function(){
+if(!d.body.contains(self.el.ctr)){clearInterval(self.cyc);return}
+if(!self.vis)self.show();
+},5000);
+}
 
-      // Time with a small clock
-      const timeSpan = document.createElement('span');
-      Object.assign(timeSpan.style, { fontSize: '12px', color: '#6b7280', display: 'flex', alignItems: 'center', gap: '3px' });
-      this.elements.timeSpan = timeSpan;
-
-      // Dot separator
-      const dot = document.createElement('span');
-      Object.assign(dot.style, { width: '3px', height: '3px', borderRadius: '50%', backgroundColor: '#d1d5db', flexShrink: '0' });
-
-      // Verify Link
-      const verifyLink = document.createElement('a');
-      verifyLink.href = `${this.apiBase}/verified`;
-      verifyLink.target = '_blank';
-      verifyLink.rel = 'noreferrer';
-      Object.assign(verifyLink.style, {
-        display: 'flex',
-        alignItems: 'center',
-        gap: '3px',
-        textDecoration: 'none',
-        cursor: 'pointer',
-        transition: 'opacity 0.2s ease-in-out',
-        opacity: '0.7'
-      });
-      verifyLink.onmouseover = function() { this.style.opacity = '1'; };
-      verifyLink.onmouseout = function() { this.style.opacity = '0.7'; };
-      this.elements.verifyLink = verifyLink;
-
-      const verifyIcon = document.createElement('div');
-      verifyIcon.style.display = 'flex';
-      verifyIcon.innerHTML = `<svg style="width:14px; height:14px;" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-      </svg>`;
-      this.elements.verifyIcon = verifyIcon;
-
-      const verifyText = document.createElement('span');
-      Object.assign(verifyText.style, { fontSize: '11px', display: 'flex', gap: '2px' });
-      // InnerHTML is set dynamically in applyStyles to handle dark/light contrast
-      this.elements.verifyText = verifyText;
-
-      verifyLink.append(verifyIcon, verifyText);
-      metaRow.append(timeSpan, dot, verifyLink);
-
-      textContainer.append(titleRow, metaRow);
-      card.appendChild(emojiContainer);
-      card.appendChild(textContainer);
-      container.appendChild(card);
-      document.body.appendChild(container);
-    }
-
-    applyStyles() {
-      const { card, container, titleRow, timeSpan, verifyLink, verifyText, verifyIcon, emojiContainer } = this.elements;
-      
-      card.style.backgroundColor = this.backgroundColor;
-      
-      if (this.showBorder) {
-        card.style.border = `2px solid #000000`;
-        card.style.borderRadius = '6px';
-        card.style.boxShadow = '4px 4px 0px 0px rgba(0, 0, 0, 1)';
-        emojiContainer.style.border = '1px solid #000000';
-        emojiContainer.style.boxShadow = 'none';
-        
-        // Hide shimmer in border mode
-        const shimmerElem = card.querySelector('.proofpopify-shimmer');
-        if (shimmerElem) shimmerElem.style.display = 'none';
-      } else {
-        card.style.border = `1px solid ${this.getBorderColor(this.backgroundColor)}`;
-        card.style.borderRadius = '14px';
-        card.style.boxShadow = '0 20px 30px -8px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.08)';
-        emojiContainer.style.border = '2px solid #ffffff';
-        emojiContainer.style.boxShadow = '0 2px 5px rgba(0,0,0,0.05)';
-        
-        // Show shimmer in normal mode
-        const shimmerElem = card.querySelector('.proofpopify-shimmer');
-        if (shimmerElem) shimmerElem.style.display = 'block';
-      }
-      
-      const textColor = this.getContrastYIQ(this.backgroundColor);
-      titleRow.style.color = textColor;
-      timeSpan.style.color = textColor;
-      verifyLink.style.opacity = '0.7';
-      verifyText.style.color = textColor;
-      timeSpan.style.opacity = '0.6';
-      verifyIcon.style.color = this.themeColor;
-      
-      // Update Verified text color
-      if (this.isTest || this.isDummy) {
-        verifyText.innerHTML = `<span style="opacity: 0.6">Verified</span> <span style="color: #6b7280; font-weight: 600;">Testing</span>`;
-      } else {
-        const stripeColor = '#422ad5';
-        verifyText.innerHTML = `<span style="opacity: 0.6">Verified by</span> <span style="color: ${stripeColor}; font-weight: 600;">Stripe</span>`;
-      }
-
-      // Instead of theme background, avatar uses its own styling set in createDOM
-
-      // Show/hide icon based on setting
-      emojiContainer.style.display = this.showIcon ? 'flex' : 'none';
-
-      // Position
-      Object.assign(container.style, { top: 'auto', bottom: 'auto', left: 'auto', right: 'auto' });
-      
-      // Determine mobile class
-      container.classList.remove('mobile-top', 'mobile-bottom');
-      if (this.position.includes('top')) {
-        container.classList.add('mobile-top');
-      } else {
-        container.classList.add('mobile-bottom');
-      }
-      if (this.position === 'top-left') {
-        container.style.top = this.positionPixel;
-        container.style.left = this.positionPixel;
-      } else if (this.position === 'top-right') {
-        container.style.top = this.positionPixel;
-        container.style.right = this.positionPixel;
-      } else if (this.position === 'bottom-right') {
-        container.style.bottom = this.positionPixel;
-        container.style.right = this.positionPixel;
-      } else {
-        container.style.bottom = this.positionPixel;
-        container.style.left = this.positionPixel;
-      }
-    }
-
-    getAvatarUrl(name) {
-      // Use dynamic global avatar URL set by the server
-      const safeName = encodeURIComponent(name || "Someone");
-      return `${this.avatarUrlBase}${safeName}`;
-    }
-
-    showNotification() {
-      if (this.transactions.length === 0) return;
-      const currentTx = this.transactions[this.currentIndex];
-      const { nameSpan, inTextNode, locationSpan, actionTextNode, timeSpan, container, emojiSpan } = this.elements;
-
-      this.applyStyles();
-      
-      const displayName = this.showRealNames ? (currentTx.name || "Someone") : "Someone";
-
-      // Set avatar image
-      emojiSpan.src = this.getAvatarUrl(displayName);
-      // Re-trigger pulse animation slightly modified for avatar
-      emojiSpan.style.animation = 'none';
-      emojiSpan.offsetHeight; // force reflow
-      emojiSpan.style.animation = 'proofpopify-pulse 0.6s ease-in-out 0.2s 1';
-
-      // Content
-      actionTextNode.nodeValue = ` ${this.actionText}`;
-      nameSpan.innerText = displayName;
-      
-      let locationText = "";
-      if (this.showCity && currentTx.city && currentTx.city !== "Unknown City") {
-        locationText = `${currentTx.city} (${currentTx.country || 'Unknown'})`;
-      } else if (currentTx.country) {
-        locationText = `${currentTx.country}`;
-      }
-
-      if (!locationText) {
-        inTextNode.nodeValue = " ";
-        locationSpan.style.display = "none";
-      } else {
-        inTextNode.nodeValue = " in ";
-        locationSpan.style.display = "inline";
-        locationSpan.innerText = locationText;
-        locationSpan.style.color = this.themeColor;
-      }
-
-      timeSpan.innerText = this.getTimeAgo(currentTx.created);
-
-      // Update Verify Link with proof_id
-      const { verifyLink } = this.elements;
-      if (verifyLink) {
-        if (this.isTest || this.isDummy) {
-          verifyLink.href = `${this.apiBase}/verified?test=true`;
-        } else {
-          verifyLink.href = `${this.apiBase}/verified?proof_id=${this.startupId}`;
-        }
-      }
-
-      // Slide In (direction based on position)
-      container.classList.remove('ppfy-animate-out', 'ppfy-animate-in-top', 'ppfy-animate-in-bottom');
-      container.style.opacity = '1';
-      container.style.pointerEvents = 'auto';
-      
-      if (this.position.includes('top')) {
-        container.classList.add('ppfy-animate-in-top');
-      } else {
-        container.classList.add('ppfy-animate-in-bottom');
-      }
-      this.isVisible = true;
-
-      // Slide Out after 4s
-      setTimeout(() => {
-        container.classList.remove('ppfy-animate-in-top', 'ppfy-animate-in-bottom');
-        container.classList.add('ppfy-animate-out');
-        
-        setTimeout(() => {
-          container.style.opacity = '0';
-          container.style.pointerEvents = 'none';
-          container.classList.remove('ppfy-animate-out');
-          this.isVisible = false;
-          this.currentIndex = (this.currentIndex + 1) % this.transactions.length;
-        }, 400);
-      }, 4000);
-    }
-
-    async fetchData() {
-      // If we know we are in dashboard test mode, don't ping the API if it's going to fail without a Stripe key yet
-      if (this.isTest) {
-        this.transactions = [
-          { name: "John Doe", city: "San Francisco", country: "United States", created: Math.floor(Date.now() / 1000) - 120 },
-        ];
-        this.parseTestOverrides();
-        this.startCycle();
-        return;
-      }
-
-      try {
-        const res = await fetch(`${this.apiBase}/api/public/transactions?proof_id=${this.startupId}`);
-        
-        if (!res.ok) {
-          const errorData = await res.json().catch(() => ({}));
-          console.error(`ProofPopify: API returned ${res.status} - ${errorData.error || 'Unknown error'}`);
-          return;
-        }
-
-        const data = await res.json();
-
-        if (data.transactions && data.transactions.length > 0) {
-          this.transactions = data.transactions;
-          this.startupName = data.startupName || this.startupName;
-
-          // Default data
-          if (data.themeColor) this.themeColor = data.themeColor;
-          if (data.backgroundColor) this.backgroundColor = data.backgroundColor;
-          if (data.actionText) this.actionText = data.actionText;
-          if (data.showRealNames !== undefined) this.showRealNames = data.showRealNames;
-          if (data.showIcon !== undefined) this.showIcon = data.showIcon;
-          if (data.showBorder !== undefined) this.showBorder = data.showBorder;
-          if (data.showCity !== undefined) this.showCity = data.showCity;
-          if (data.position) this.position = data.position;
-          if (data.avatarUrlBase) this.avatarUrlBase = data.avatarUrlBase;
-          if (data.isDummy !== undefined) this.isDummy = data.isDummy;
-
-          this.startCycle();
-        } else {
-          console.warn('ProofPopify: No transactions found. The popup will not appear.');
-        }
-      } catch (err) {
-        console.error("ProofPopify: Error fetching data", err);
-      }
-    }
-
-    parseTestOverrides() {
-      if (!this.isTest) return;
-      const forceTheme = this.urlObj.searchParams.get('theme');
-      const forceBg = this.urlObj.searchParams.get('bg');
-      const forceAction = this.urlObj.searchParams.get('action');
-      const forceRealNames = this.urlObj.searchParams.get('realNames');
-      const forcePosition = this.urlObj.searchParams.get('position');
-      const forceShowIcon = this.urlObj.searchParams.get('showIcon');
-      const forceShowBorder = this.urlObj.searchParams.get('showBorder');
-      const forceShowCity = this.urlObj.searchParams.get('showCity');
-
-      if (forceTheme) this.themeColor = decodeURIComponent(forceTheme);
-      if (forceBg) this.backgroundColor = decodeURIComponent(forceBg);
-      if (forceAction) this.actionText = decodeURIComponent(forceAction);
-      if (forceRealNames !== null) this.showRealNames = forceRealNames === 'true';
-      if (forceShowIcon !== null) this.showIcon = forceShowIcon === 'true';
-      if (forceShowBorder !== null) this.showBorder = forceShowBorder === 'true';
-      if (forceShowCity !== null) this.showCity = forceShowCity === 'true';
-      if (forcePosition) this.position = forcePosition;
-    }
-
-    startCycle() {
-      this.showNotification();
-      this.cycleInterval = setInterval(() => {
-        if (!document.body.contains(this.elements.container)) {
-          clearInterval(this.cycleInterval);
-          return;
-        }
-        if (!this.isVisible) {
-          this.showNotification();
-        }
-      }, 5000);
-    }
-
-    // Helpers
-    getContrastYIQ(hexcolor){
-      hexcolor = hexcolor.replace("#", "");
-      var r = parseInt(hexcolor.substr(0, 2), 16);
-      var g = parseInt(hexcolor.substr(2, 2), 16);
-      var b = parseInt(hexcolor.substr(4, 2), 16);
-      var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-      return (yiq >= 128) ? '#374151' : '#f3f4f6'; 
-    }
-    
-    getBorderColor(hexcolor){
-      hexcolor = hexcolor.replace("#", "");
-      var r = parseInt(hexcolor.substr(0, 2), 16);
-      var g = parseInt(hexcolor.substr(2, 2), 16);
-      var b = parseInt(hexcolor.substr(4, 2), 16);
-      var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-      return (yiq >= 128) ? '#e5e7eb' : '#374151'; 
-    }
-
-    getTimeAgo(timestamp) {
-      const seconds = Math.floor(Date.now() / 1000) - timestamp;
-      if (seconds < 60) return "Just now";
-      const minutes = Math.floor(seconds / 60);
-      if (minutes < 60) return `${minutes} minutes ago`;
-      const hours = Math.floor(minutes / 60);
-      if (hours < 24) return `${hours} hours ago`;
-      const days = Math.floor(hours / 24);
-      return `${days} days ago`;
-    }
-  }
-
-  new ProofPopifyWidget();
+ago(ts){
+var s=Math.floor(Date.now()/1000)-ts;
+if(s<60)return'Just now';
+var m=Math.floor(s/60);if(m<60)return m+' minutes ago';
+var h=Math.floor(m/60);if(h<24)return h+' hours ago';
+return Math.floor(h/24)+' days ago';
+}
+}
+new ProofPopifyWidget();
 })();
